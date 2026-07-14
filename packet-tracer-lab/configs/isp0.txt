@@ -1,0 +1,46 @@
+! ISP0 — simulated Internet edge + NTP stratum-1 master
+! Paste in global config mode (enable -> configure terminal)
+
+hostname ISP0
+no ip domain-lookup
+ip domain-name lab.local
+
+enable secret Lab-Enable1!
+service password-encryption
+security passwords min-length 10
+
+username admin privilege 15 algorithm-type scrypt secret Lab-Admin1!
+
+banner motd ^C
+***********************************************************
+* ISP0 - simulated Internet edge for CCNA-LAB.            *
+* Authorized lab use only.                                *
+***********************************************************
+^C
+
+crypto key generate rsa modulus 2048
+ip ssh version 2
+
+line console 0
+ login local
+ exec-timeout 10 0
+ logging synchronous
+line vty 0 4
+ transport input ssh
+ login local
+ exec-timeout 10 0
+
+interface GigabitEthernet0/0
+ description Link to R1-EDGE (outside)
+ ip address 203.0.113.1 255.255.255.248
+ no shutdown
+
+interface Loopback0
+ description Simulated Internet host - ping target
+ ip address 8.8.8.8 255.255.255.255
+
+ntp master 1
+clock timezone EST -5
+
+end
+copy running-config startup-config

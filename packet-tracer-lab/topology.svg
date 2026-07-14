@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1700 1020" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <style>
+    .infra { fill:#eaf2fb; stroke:#2c5aa0; stroke-width:2; }
+    .wireless { fill:#fff7e6; stroke:#b8860b; stroke-width:2; }
+    .endpoint { fill:#eafaf1; stroke:#2e8b57; stroke-width:2; }
+    .isp { fill:#f3eafb; stroke:#6a3fa0; stroke-width:2; }
+    .lbl { fill:#1a2b3c; font-size:15px; font-weight:600; text-anchor:middle; }
+    .sub { fill:#3a4a5c; font-size:11px; text-anchor:middle; }
+    .link { stroke:#6b7280; stroke-width:2; fill:none; }
+    .lag { stroke:#2c5aa0; stroke-width:4; fill:none; }
+    .wlink { stroke:#b8860b; stroke-width:2; stroke-dasharray:6,4; fill:none; }
+    .netlbl { fill:#4b5563; font-size:10.5px; text-anchor:middle; }
+  </style>
+
+  <!-- ================= LINKS (drawn first, under boxes) ================= -->
+  <!-- ISP0 - R1 -->
+  <line class="link" x1="850" y1="65" x2="850" y2="140"/>
+  <text class="netlbl" x="960" y="105">203.0.113.0/29</text>
+
+  <!-- R1 - D1 / R1 - D2 (OSPF point-to-point) -->
+  <line class="link" x1="810" y1="175" x2="520" y2="270"/>
+  <text class="netlbl" x="640" y="215">10.0.12.0/30 (OSPF p2p)</text>
+  <line class="link" x1="890" y1="175" x2="1180" y2="270"/>
+  <text class="netlbl" x="1060" y="215">10.0.13.0/30 (OSPF p2p)</text>
+
+  <!-- D1 - D2 peer EtherChannel -->
+  <line class="lag" x1="580" y1="295" x2="1120" y2="295"/>
+  <text class="netlbl" x="850" y="285">Po1 (LACP trunk) — all VLANs, native 999, OSPF DR/BDR + HSRP heartbeat</text>
+
+  <!-- D1 - R2 primary / D2 - R2 backup (static only, no OSPF) -->
+  <line class="link" x1="530" y1="320" x2="800" y2="410"/>
+  <text class="netlbl" x="620" y="375">172.16.12.0/30 primary (static)</text>
+  <line class="link" x1="1170" y1="320" x2="900" y2="410"/>
+  <text class="netlbl" x="1090" y="375">172.16.13.0/30 backup (floating static)</text>
+
+  <!-- R2 - PC5 branch LAN -->
+  <line class="link" x1="850" y1="445" x2="850" y2="530"/>
+  <text class="netlbl" x="960" y="490">192.168.40.0/24</text>
+
+  <!-- D1 - ACC1 / D2 - ACC2 (EtherChannel uplinks) -->
+  <line class="lag" x1="470" y1="310" x2="270" y2="410"/>
+  <text class="netlbl" x="320" y="370">Po (LACP trunk)</text>
+  <line class="lag" x1="1230" y1="310" x2="1440" y2="410"/>
+  <text class="netlbl" x="1400" y="370">Po (LACP trunk)</text>
+
+  <!-- ACC1 endpoints -->
+  <line class="link" x1="220" y1="445" x2="110" y2="555"/>
+  <line class="link" x1="250" y1="445" x2="260" y2="555"/>
+  <line class="link" x1="270" y1="445" x2="400" y2="555"/>
+  <!-- ACC1 - WLC1 -->
+  <line class="link" x1="220" y1="445" x2="260" y2="670"/>
+  <text class="netlbl" x="180" y="560">VLAN99+50 trunk</text>
+  <!-- WLC1 - AP1 CAPWAP -->
+  <line class="wlink" x1="260" y1="705" x2="260" y2="790"/>
+  <text class="netlbl" x="330" y="750">CAPWAP tunnel</text>
+  <!-- ACC1 - AP1 physical -->
+  <line class="link" x1="220" y1="445" x2="230" y2="790"/>
+  <!-- AP1 - Laptop0 wireless -->
+  <line class="wlink" x1="260" y1="825" x2="260" y2="910"/>
+  <text class="netlbl" x="340" y="870">WPA2-PSK, VLAN 50</text>
+
+  <!-- ACC2 endpoints -->
+  <line class="link" x1="1430" y1="445" x2="1350" y2="555"/>
+  <line class="link" x1="1450" y1="445" x2="1450" y2="555"/>
+  <line class="link" x1="1470" y1="445" x2="1560" y2="555"/>
+
+  <!-- ================= NODES ================= -->
+  <g>
+    <rect class="isp" x="780" y="15" width="140" height="50" rx="6"/>
+    <text class="lbl" x="850" y="36">ISP0</text>
+    <text class="sub" x="850" y="52">simulated Internet · NTP master</text>
+  </g>
+
+  <g>
+    <rect class="infra" x="780" y="140" width="140" height="50" rx="6"/>
+    <text class="lbl" x="850" y="161">R1-EDGE</text>
+    <text class="sub" x="850" y="177">NAT · OSPF · Lo0 1.1.1.1</text>
+  </g>
+
+  <g>
+    <rect class="infra" x="440" y="270" width="140" height="50" rx="6"/>
+    <text class="lbl" x="510" y="291">D1 (SW-DIST1)</text>
+    <text class="sub" x="510" y="307">Lo0 2.2.2.2</text>
+  </g>
+  <g>
+    <rect class="infra" x="1120" y="270" width="140" height="50" rx="6"/>
+    <text class="lbl" x="1190" y="291">D2 (SW-DIST2)</text>
+    <text class="sub" x="1190" y="307">Lo0 3.3.3.3</text>
+  </g>
+
+  <g>
+    <rect class="infra" x="780" y="410" width="140" height="40" rx="6"/>
+    <text class="lbl" x="850" y="435">R2-BRANCH</text>
+  </g>
+  <g>
+    <rect class="endpoint" x="800" y="530" width="100" height="34" rx="6"/>
+    <text class="lbl" x="850" y="552" style="font-size:13px">PC5</text>
+  </g>
+
+  <g>
+    <rect class="infra" x="150" y="410" width="140" height="40" rx="6"/>
+    <text class="lbl" x="220" y="435">ACC1</text>
+  </g>
+  <g>
+    <rect class="infra" x="1370" y="410" width="140" height="40" rx="6"/>
+    <text class="lbl" x="1440" y="435">ACC2</text>
+  </g>
+
+  <!-- ACC1 endpoints -->
+  <g>
+    <rect class="endpoint" x="65" y="555" width="90" height="34" rx="6"/>
+    <text class="lbl" x="110" y="577" style="font-size:12px">PC1 (V10)</text>
+  </g>
+  <g>
+    <rect class="endpoint" x="215" y="555" width="100" height="34" rx="6"/>
+    <text class="lbl" x="265" y="577" style="font-size:11.5px">PC2+Phone</text>
+  </g>
+  <g>
+    <rect class="endpoint" x="355" y="555" width="110" height="34" rx="6"/>
+    <text class="lbl" x="410" y="577" style="font-size:11.5px">PC-ADMIN (V99)</text>
+  </g>
+
+  <g>
+    <rect class="wireless" x="200" y="670" width="120" height="36" rx="6"/>
+    <text class="lbl" x="260" y="693" style="font-size:13px">WLC1</text>
+  </g>
+  <g>
+    <rect class="wireless" x="205" y="790" width="110" height="36" rx="6"/>
+    <text class="lbl" x="260" y="813" style="font-size:13px">AP1</text>
+  </g>
+  <g>
+    <rect class="wireless" x="200" y="910" width="120" height="36" rx="6"/>
+    <text class="lbl" x="260" y="933" style="font-size:12.5px">Laptop0 (Wi-Fi)</text>
+  </g>
+
+  <!-- ACC2 endpoints -->
+  <g>
+    <rect class="endpoint" x="1305" y="555" width="90" height="34" rx="6"/>
+    <text class="lbl" x="1350" y="577" style="font-size:12px">PC3 (V10)</text>
+  </g>
+  <g>
+    <rect class="endpoint" x="1405" y="555" width="90" height="34" rx="6"/>
+    <text class="lbl" x="1450" y="577" style="font-size:12px">PC4 (V10)</text>
+  </g>
+  <g>
+    <rect class="endpoint" x="1505" y="555" width="110" height="34" rx="6"/>
+    <text class="lbl" x="1560" y="577" style="font-size:11.5px">Server1 (V30)</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(40,960)">
+    <line class="link" x1="0" y1="0" x2="30" y2="0"/>
+    <text class="sub" x="36" y="4" text-anchor="start">Routed / access link</text>
+    <line class="lag" x1="230" y1="0" x2="260" y2="0"/>
+    <text class="sub" x="266" y="4" text-anchor="start">EtherChannel (LACP) trunk</text>
+    <line class="wlink" x1="500" y1="0" x2="530" y2="0"/>
+    <text class="sub" x="536" y="4" text-anchor="start">Wireless / CAPWAP</text>
+  </g>
+</svg>
