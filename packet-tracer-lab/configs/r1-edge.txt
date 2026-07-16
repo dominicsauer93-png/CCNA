@@ -31,7 +31,7 @@ ip access-list standard MGMT-ACCESS
 ! Defined here so they exist before being referenced under the interfaces/NAT below.
 ip access-list extended OUTSIDE-IN
  permit icmp any any echo-reply
- permit icmp any any time-exceeded
+ permit icmp any any ttl-exceeded
  permit icmp any any unreachable
  permit tcp any host 203.0.113.5 eq 80
  permit udp any host 203.0.113.5 eq 69
