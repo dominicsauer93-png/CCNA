@@ -10,9 +10,8 @@ ip domain-name lab.local
 
 enable secret Lab-Enable1!
 service password-encryption
-security passwords min-length 10
 
-username admin privilege 15 algorithm-type scrypt secret Lab-Admin1!
+username admin privilege 15 secret Lab-Admin1!
 
 banner motd ^C
 ***********************************************************
@@ -53,6 +52,8 @@ logging trap informational
 clock timezone EST -5
 ntp server 10.0.13.1 prefer
 
+! If your Packet Tracer version rejects SNMPv3 syntax below, fall back to:
+!   snmp-server community LabRO1! RO
 snmp-server group SNMP-ADMINS v3 priv
 snmp-server user snmpadmin SNMP-ADMINS v3 auth sha Lab-SnmpAuth1! priv aes 128 Lab-SnmpPriv1!
 snmp-server host 192.168.30.10 version 3 priv snmpadmin
@@ -140,7 +141,7 @@ interface Vlan10
  standby 10 ip 192.168.10.1
  standby 10 priority 90
  standby 10 preempt
- standby 10 authentication md5 key-string Lab-Hsrp1!
+ standby 10 authentication CcnaLab1
  no shutdown
 
 interface Vlan20
@@ -151,7 +152,7 @@ interface Vlan20
  standby 20 ip 192.168.20.1
  standby 20 priority 110
  standby 20 preempt
- standby 20 authentication md5 key-string Lab-Hsrp1!
+ standby 20 authentication CcnaLab1
  no shutdown
 
 interface Vlan30
@@ -161,7 +162,7 @@ interface Vlan30
  standby 30 ip 192.168.30.1
  standby 30 priority 90
  standby 30 preempt
- standby 30 authentication md5 key-string Lab-Hsrp1!
+ standby 30 authentication CcnaLab1
  no shutdown
 
 interface Vlan50
@@ -172,7 +173,7 @@ interface Vlan50
  standby 50 ip 192.168.50.1
  standby 50 priority 110
  standby 50 preempt
- standby 50 authentication md5 key-string Lab-Hsrp1!
+ standby 50 authentication CcnaLab1
  no shutdown
 
 interface Vlan99
@@ -182,7 +183,7 @@ interface Vlan99
  standby 99 ip 192.168.99.1
  standby 99 priority 90
  standby 99 preempt
- standby 99 authentication md5 key-string Lab-Hsrp1!
+ standby 99 authentication CcnaLab1
  no shutdown
 
 ! ---- Apply the VOICE-RESTRICT ACL on the VLAN 20 SVI ----

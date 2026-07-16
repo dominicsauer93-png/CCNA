@@ -8,9 +8,8 @@ ip domain-name lab.local
 
 enable secret Lab-Enable1!
 service password-encryption
-security passwords min-length 10
 
-username admin privilege 15 algorithm-type scrypt secret Lab-Admin1!
+username admin privilege 15 secret Lab-Admin1!
 
 banner motd ^C
 ***********************************************************
@@ -60,6 +59,8 @@ logging trap informational
 clock timezone EST -5
 ntp server 203.0.113.1 prefer
 
+! If your Packet Tracer version rejects SNMPv3 syntax below, fall back to:
+!   snmp-server community LabRO1! RO
 snmp-server group SNMP-ADMINS v3 priv
 snmp-server user snmpadmin SNMP-ADMINS v3 auth sha Lab-SnmpAuth1! priv aes 128 Lab-SnmpPriv1!
 snmp-server host 192.168.30.10 version 3 priv snmpadmin

@@ -7,9 +7,8 @@ ip domain-name lab.local
 
 enable secret Lab-Enable1!
 service password-encryption
-security passwords min-length 10
 
-username admin privilege 15 algorithm-type scrypt secret Lab-Admin1!
+username admin privilege 15 secret Lab-Admin1!
 
 banner motd ^C
 ***********************************************************
