@@ -20,7 +20,7 @@ banner motd ^C
 ***********************************************************
 ^C
 
-crypto key generate rsa modulus 2048
+crypto key generate rsa general-keys modulus 2048
 ip ssh version 2
 
 ip access-list standard MGMT-ACCESS
