@@ -151,6 +151,16 @@ matters is which logical link goes where.
    type).
 3. Power on and paste each device's config file from `configs/` into its
    CLI (`enable` → `configure terminal` → paste → `end` → `copy running-config startup-config`).
+
+   **Paste in smaller chunks, not the whole file at once.** Packet Tracer's
+   simulated console can drop a character on the first line after a paste
+   (commonly the leading letter of a command right after a blank line —
+   e.g. `ip access-list ...` becomes `p access-list ...` and PT rejects it
+   as an ambiguous command). Paste one logical block at a time (hostname/
+   passwords, then banner, then ACLs, then lines, then interfaces, etc.),
+   and run `show running-config` afterward to confirm nothing got
+   truncated. If a line does get mangled, just retype it manually at the
+   prompt — it's a paste artifact, not a problem with the config itself.
 4. Configure Server1 and WLC1 via GUI per `configs/server1-services.md` and
    `configs/wlc1-gui-steps.md`.
 5. Set PCs/laptop/PC5 to DHCP (`ip dhcp` / "DHCP" radio button under
