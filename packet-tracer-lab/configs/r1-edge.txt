@@ -25,7 +25,7 @@ ip ssh authentication-retries 3
 
 ip access-list standard MGMT-ACCESS
  permit 192.168.99.0 0.0.0.255
- deny   any log
+ deny   any
 
 ! ---- Inbound ACL for the outside (ISP-facing) interface, and NAT permit list ----
 ! Defined here so they exist before being referenced under the interfaces/NAT below.
@@ -36,7 +36,7 @@ ip access-list extended OUTSIDE-IN
  permit tcp any host 203.0.113.5 eq 80
  permit udp any host 203.0.113.5 eq 69
  permit tcp any any established
- deny   ip any any log
+ deny   ip any any
 
 access-list 1 permit 192.168.0.0 0.0.255.255
 

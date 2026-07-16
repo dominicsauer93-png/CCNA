@@ -23,7 +23,7 @@ ip ssh version 2
 
 ip access-list standard MGMT-ACCESS
  permit 192.168.99.0 0.0.0.255
- deny   any log
+ deny   any
 
 line console 0
  login local

@@ -25,7 +25,7 @@ ip ssh version 2
 
 ip access-list standard MGMT-ACCESS
  permit 192.168.99.0 0.0.0.255
- deny   any log
+ deny   any
 
 ! ---- Extended ACL: block VOICE VLAN from SSH/Telnet into SERVERS VLAN ----
 ip access-list extended VOICE-RESTRICT
