@@ -71,7 +71,6 @@ ip dhcp pool BRANCH-LAN
  network 192.168.40.0 255.255.255.0
  default-router 192.168.40.1
  dns-server 192.168.30.10
- lease 8
 
 end
 copy running-config startup-config
