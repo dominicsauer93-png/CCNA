@@ -72,6 +72,8 @@ interface range GigabitEthernet0/1 - 2
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
  switchport nonegotiate
+ ip dhcp snooping trust
+ ip arp inspection trust
  channel-group 1 mode active
  no shutdown
 interface Port-channel1
@@ -80,8 +82,6 @@ interface Port-channel1
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
  switchport nonegotiate
- ip dhcp snooping trust
- ip arp inspection trust
 
 ! ---- Access ports ----
 interface GigabitEthernet0/3

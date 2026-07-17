@@ -104,6 +104,8 @@ interface range GigabitEthernet1/0/5 - 6
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
  switchport nonegotiate
+ ip dhcp snooping trust
+ ip arp inspection trust
  channel-group 10 mode active
  no shutdown
 interface Port-channel10
@@ -112,8 +114,6 @@ interface Port-channel10
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
  switchport nonegotiate
- ip dhcp snooping trust
- ip arp inspection trust
 
 interface Loopback0
  description OSPF Router ID
