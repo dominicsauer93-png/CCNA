@@ -42,7 +42,7 @@ logging host 192.168.30.10
 
 clock timezone AEST 10
 ! Extends the NTP hierarchy: ISP0 -> R1 -> D1 -> R2
-ntp server 172.16.12.1 prefer
+ntp server 172.16.12.1
 
 no ip http server
 no ip http secure-server

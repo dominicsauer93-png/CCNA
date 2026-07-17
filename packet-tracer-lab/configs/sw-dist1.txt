@@ -43,7 +43,7 @@ logging buffered 16384
 logging host 192.168.30.10
 
 clock timezone AEST 10
-ntp server 10.0.12.1 prefer
+ntp server 10.0.12.1
 
 ! If your Packet Tracer version rejects SNMPv3 syntax below, fall back to:
 !   snmp-server community LabRO1! RO
