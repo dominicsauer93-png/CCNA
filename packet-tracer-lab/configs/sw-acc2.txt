@@ -43,8 +43,6 @@ logging host 192.168.30.10
 clock timezone AEST 10
 ntp server 192.168.99.3
 
-no ip http server
-no ip http secure-server
 cdp run
 lldp run
 

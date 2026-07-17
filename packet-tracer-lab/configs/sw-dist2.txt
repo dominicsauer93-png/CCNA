@@ -57,8 +57,6 @@ snmp-server group SNMP-ADMINS v3 priv
 snmp-server user snmpadmin SNMP-ADMINS v3 auth sha Lab-SnmpAuth1! priv aes 128 Lab-SnmpPriv1!
 snmp-server host 192.168.30.10 version 3 priv snmpadmin
 
-no ip http server
-no ip http secure-server
 cdp run
 lldp run
 

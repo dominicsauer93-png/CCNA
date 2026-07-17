@@ -44,9 +44,6 @@ clock timezone AEST 10
 ! Extends the NTP hierarchy: ISP0 -> R1 -> D1 -> R2
 ntp server 172.16.12.1
 
-no ip http server
-no ip http secure-server
-
 interface GigabitEthernet0/0
  description Primary WAN - link to D1
  ip address 172.16.12.2 255.255.255.252
