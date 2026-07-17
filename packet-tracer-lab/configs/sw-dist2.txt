@@ -91,7 +91,6 @@ interface GigabitEthernet1/0/2
 
 ! ---- Po1: peer EtherChannel trunk to D1 ----
 interface range GigabitEthernet1/0/3 - 4
- switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
@@ -100,7 +99,6 @@ interface range GigabitEthernet1/0/3 - 4
  no shutdown
 interface Port-channel1
  description Peer link to SW-DIST1
- switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
@@ -108,7 +106,6 @@ interface Port-channel1
 
 ! ---- Po10: EtherChannel trunk uplink to ACC2 ----
 interface range GigabitEthernet1/0/5 - 6
- switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
@@ -117,7 +114,6 @@ interface range GigabitEthernet1/0/5 - 6
  no shutdown
 interface Port-channel10
  description Uplink to SW-ACC2
- switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99

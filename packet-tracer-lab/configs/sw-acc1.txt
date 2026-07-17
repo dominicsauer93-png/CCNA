@@ -68,7 +68,6 @@ ip default-gateway 192.168.99.1
 
 ! ---- Po1: EtherChannel trunk uplink to D1 ----
 interface range GigabitEthernet0/1 - 2
- switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
@@ -77,7 +76,6 @@ interface range GigabitEthernet0/1 - 2
  no shutdown
 interface Port-channel1
  description Uplink to SW-DIST1
- switchport trunk encapsulation dot1q
  switchport mode trunk
  switchport trunk native vlan 999
  switchport trunk allowed vlan 10,20,30,50,99
