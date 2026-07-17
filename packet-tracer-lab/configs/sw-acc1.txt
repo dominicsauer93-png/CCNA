@@ -36,10 +36,10 @@ line vty 0 15
  exec-timeout 10 0
  logging synchronous
 
-service timestamps log datetime msec localtime show-timezone
-logging buffered 16384 informational
+service timestamps log datetime msec
+logging buffered 16384 6
 logging host 192.168.30.10
-logging trap informational
+logging trap 6
 
 clock timezone AEST 10
 ntp server 192.168.99.2 prefer
