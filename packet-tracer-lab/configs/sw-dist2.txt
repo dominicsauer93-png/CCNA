@@ -45,9 +45,8 @@ line vty 0 15
  logging synchronous
 
 service timestamps log datetime msec
-logging buffered 16384 6
+logging buffered 16384
 logging host 192.168.30.10
-logging trap 6
 
 clock timezone AEST 10
 ntp server 10.0.13.1 prefer
