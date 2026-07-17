@@ -39,7 +39,7 @@ interface Loopback0
  ip address 8.8.8.8 255.255.255.255
 
 ntp master 1
-clock timezone EST -5
+clock timezone AEST 10
 
 end
 copy running-config startup-config

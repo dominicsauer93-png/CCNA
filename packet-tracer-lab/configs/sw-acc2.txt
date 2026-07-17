@@ -41,7 +41,7 @@ logging buffered 16384 informational
 logging host 192.168.30.10
 logging trap informational
 
-clock timezone EST -5
+clock timezone AEST 10
 ntp server 192.168.99.3 prefer
 
 no ip http server

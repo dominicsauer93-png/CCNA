@@ -56,7 +56,7 @@ logging buffered 16384 informational
 logging host 192.168.30.10
 logging trap informational
 
-clock timezone EST -5
+clock timezone AEST 10
 ntp server 203.0.113.1 prefer
 
 ! If your Packet Tracer version rejects SNMPv3 syntax below, fall back to:
