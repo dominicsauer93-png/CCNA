@@ -1,0 +1,83 @@
+! R2-BRANCH — branch-office router, pure static routing (deliberately kept out of OSPF)
+! Interfaces: Gi0/0 = D1 (primary WAN), Gi0/1 = D2 (backup WAN), Gi0/2 = branch LAN
+! Paste in global config mode (enable -> configure terminal)
+
+hostname R2-BRANCH
+no ip domain-lookup
+ip domain-name lab.local
+
+enable secret Lab-Enable1!
+service password-encryption
+
+username admin privilege 15 password Lab-Admin1!
+
+banner motd ^C
+***********************************************************
+* R2-BRANCH - CCNA-LAB branch router.                     *
+* Authorized lab use only. All access logged.             *
+***********************************************************
+^C
+
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+
+ip access-list standard MGMT-ACCESS
+ permit 192.168.99.0 0.0.0.255
+ deny   any
+
+line console 0
+ login local
+ exec-timeout 10 0
+ logging synchronous
+line vty 0 15
+ transport input ssh
+ login local
+ access-class MGMT-ACCESS in
+ exec-timeout 10 0
+ logging synchronous
+
+service timestamps log datetime msec
+logging buffered 16384
+logging host 192.168.30.10
+
+clock timezone AEST 10
+! Extends the NTP hierarchy: ISP0 -> R1 -> D1 -> R2
+ntp server 172.16.12.1
+
+interface GigabitEthernet0/0
+ description Primary WAN - link to D1
+ ip address 172.16.12.2 255.255.255.252
+ no shutdown
+
+interface GigabitEthernet0/1
+ description Backup WAN - link to D2
+ ip address 172.16.13.2 255.255.255.252
+ no shutdown
+
+interface GigabitEthernet0/2
+ description Branch LAN
+ ip address 192.168.40.1 255.255.255.0
+ no shutdown
+
+! ---- 3.3.a Default route (primary) ----
+ip route 0.0.0.0 0.0.0.0 172.16.12.1
+
+! ---- 3.3.d Floating static default route (backup, AD 200 so it's only used if the primary is withdrawn) ----
+ip route 0.0.0.0 0.0.0.0 172.16.13.1 200
+
+! ---- Local DHCP pool for the branch LAN (3.3 lab also gets a taste of a local DHCP server) ----
+ip dhcp excluded-address 192.168.40.1 192.168.40.10
+ip dhcp pool BRANCH-LAN
+ network 192.168.40.0 255.255.255.0
+ default-router 192.168.40.1
+ dns-server 192.168.30.10
+
+end
+copy running-config startup-config
+
+! ---- Verification / failover test ----
+! show ip route static
+! interface GigabitEthernet0/0 -> shutdown   (simulate primary WAN failure)
+! show ip route static                        (floating route via Gi0/1 should now appear)
+! ping 172.16.13.1
+! interface GigabitEthernet0/0 -> no shutdown (restore primary)
