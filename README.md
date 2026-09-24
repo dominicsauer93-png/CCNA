@@ -9,3 +9,7 @@ Study materials and lab configs for the Cisco CCNA 200-301 v1.1 exam.
   objectives hands-on.
 - [`configs/`](configs/) — standalone production-style configs (e.g. a
   Day-0 access switch build).
+- [`real-world/`](real-world/) — CCNA vs Real World working notes: real
+  on-the-job issues tied back to CCNA knowledge. Edit
+  `CCNA_vs_RealWorld.md`, then run `node real-world/build_docx.js` to
+  rebuild the `.docx`.
