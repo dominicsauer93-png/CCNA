@@ -27,3 +27,9 @@ Before anything Dom sends goes into the repo, strip real identifiers and use gen
 | Site, school, department, people names | Omit or use a generic role |
 
 Keep vendor, model and software version info unless it identifies the organisation. When chatting, explain using the generic versions too.
+
+## SOPs (OneNote)
+
+- Working copy: Claude Docs doc "SOPs" — https://claude.ai/code/artifact/5936acb8-0b87-4214-8526-8d0b33b6d2ab
+- Structure: SOP list + Page template, then sections Device upgrades / Configuration changes / Backups and restores / New device installs / Troubleshooting / Reference. Generic (any model, Cisco + Aruba) SOP first in each section, model-specific ones below. Add each new SOP to the SOP list table.
+- Export for OneNote: `sops/Network_SOPs_OneNote.html` — one card per OneNote page with a "Copy this page" button. Regenerate it after SOP changes. Dom confirmed this paste workflow works.
