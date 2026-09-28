@@ -32,4 +32,4 @@ Keep vendor, model and software version info unless it identifies the organisati
 
 - Working copy: Claude Docs doc "SOPs" — https://claude.ai/code/artifact/5936acb8-0b87-4214-8526-8d0b33b6d2ab
 - Structure: SOP list + Page template, then sections Device upgrades / Configuration changes / Backups and restores / New device installs / Troubleshooting / Reference. Generic (any model, Cisco + Aruba) SOP first in each section, model-specific ones below. Add each new SOP to the SOP list table.
-- Export for OneNote: `sops/Network_SOPs_OneNote.html` — one card per OneNote page with a "Copy this page" button. Regenerate it after SOP changes. Dom confirmed this paste workflow works.
+- Export for OneNote: `sops/Network_SOPs_OneNote.html` — one card per OneNote page with a "Copy this page" button. Regenerate it after SOP changes: export the doc tab as HTML with the docs export tool, then `python3 sops/build_onenote.py <saved-export-file>`. Dom confirmed this paste workflow works.
