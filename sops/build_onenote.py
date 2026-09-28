@@ -2,7 +2,8 @@
 
 Usage: python3 sops/build_onenote.py <export.json|export.html>
   export.json = the raw export tool result ({"data": {"bytes_b64": ...}}); a plain .html fragment also works.
-Writes sops/Network_SOPs_OneNote.html: one card per OneNote page, each with a "Copy this page" button.
+Writes sops/Network_SOPs_OneNote.html: one card per OneNote page, each with a "Copy this page" button,
+and sops/onenote_pages.json: the same pages for Add-SOPsToOneNote.ps1 (Microsoft Graph upload).
 """
 import base64
 import html as H
@@ -12,6 +13,7 @@ import re
 import sys
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Network_SOPs_OneNote.html")
+PAGES_JSON = os.path.join(os.path.dirname(OUT), "onenote_pages.json")
 START_PAGES = ("SOP list", "Page template")
 
 
@@ -101,6 +103,15 @@ function copyPage(id,btn){{
 if __name__ == "__main__":
     pages = split_pages(inline_styles(load(sys.argv[1])))
     open(OUT, "w", encoding="utf-8").write(render(pages))
+    # OneNote's page API ignores <code>; use a monospace span instead. The heading is dropped
+    # because the page title carries it.
+    graph = [
+        {"section": pg["section"], "title": pg["title"],
+         "html": re.sub(r"<code[^>]*>(.*?)</code>", r'<span style="font-family:Consolas">\1</span>',
+                        re.sub(r"^<h[23][^>]*>.*?</h[23]>", "", pg["html"], flags=re.S), flags=re.S)}
+        for pg in pages
+    ]
+    json.dump(graph, open(PAGES_JSON, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     for pg in pages:
         print(f'{pg["section"]} | {pg["title"]}')
     print(f"{len(pages)} pages -> {OUT}")
