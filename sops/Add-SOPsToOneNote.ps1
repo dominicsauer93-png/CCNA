@@ -75,7 +75,11 @@ foreach ($name in ($pages.section | Select-Object -Unique)) {
         $match = $existing | Where-Object { $_.title -eq $p.title }
         if ($match) {
             if (-not $Replace) { Write-Host "  skip    $($p.title)"; $skipped++; continue }
-            foreach ($m in $match) { Invoke-MgGraphRequest -Method DELETE -Uri "$base/pages/$($m.id)" | Out-Null }
+            # The page list can lag behind deletes or repeat a page, so a 404 just means it's already gone.
+            foreach ($id in ($match.id | Select-Object -Unique)) {
+                try { Invoke-MgGraphRequest -Method DELETE -Uri "$base/pages/$id" | Out-Null }
+                catch { if ("$_" -notmatch "404|20102") { throw } }
+            }
             $replaced++
         }
         $html = "<!DOCTYPE html><html><head><title>$(Encode $p.title)</title>" +
