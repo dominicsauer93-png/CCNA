@@ -1,0 +1,14 @@
+{
+ "SOP list": "4f0de123282ca55e888872e6c59f36a7a01133d0",
+ "Page template": "c87712d69f144d966c69efb8e8ead2a131d054da",
+ "Switch firmware upgrade (any model, Cisco or Aruba)": "a2f6ad9d994d8a134e0429e31d25045b79fc507f",
+ "Router firmware upgrade (any model, Cisco or Aruba)": "ad04a82fc7ee28b9539b200402803fa6bb3d81d4",
+ "IOS-XE upgrade on an ISR via the caching server": "00a325363ac20183c3352869db24d5335be4e9b9",
+ "Cisco IMC (CIMC) firmware update on a UCS server": "3872aad699cd3a6d568ee5af0da3cfda358fbd50",
+ "Cisco Catalyst switch IOS-XE upgrade (single switch or stack)": "fe1743b432e601dc0767c6ab1b65ba132c98ee75",
+ "Switch config backup and restore (any model, Cisco or Aruba)": "9dbca3a2cbf54387752b65f362322932af2cd3f0",
+ "Cisco config backup and restore (IOS / IOS-XE)": "a48dc80cffa66670b34257cbffc850c38c254f95",
+ "New switch install (any model, Cisco or Aruba)": "a7a4e0edebeb6004bc177caf5ac5bb1aa7743d04",
+ "New Cisco access switch install": "23791ba2612da6258237ab59dafcdd4a08067c3c",
+ "Cisco IMC (CIMC) management": "fbf36ea95db96254d8404bf18fe978b87da952b3"
+}
