@@ -7,5 +7,7 @@ Study materials and lab configs for the Cisco CCNA 200-301 v1.1 exam.
 - [`packet-tracer-lab/`](packet-tracer-lab/) — a complete Packet Tracer
   topology and paste-ready device configs to build and test the blueprint
   objectives hands-on.
+- [`cml-lab/`](cml-lab/) — the same lab ported to Cisco Modeling Labs
+  (CML): importable lab file + IOS startup configs.
 - [`configs/`](configs/) — standalone production-style configs (e.g. a
   Day-0 access switch build).

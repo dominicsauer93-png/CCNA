@@ -1,0 +1,80 @@
+! SERVER1 - DHCP / DNS / NTP / TFTP / HTTP server (CML: IOSv acting as a server)
+! Replaces the Packet Tracer "Generic Server". Gi0/0 = SW-ACC2 Gi1/0 (VLAN 30)
+! Not possible on IOS: a syslog *receiver*. Use "show logging" on each device instead.
+hostname SERVER1
+no ip domain-lookup
+ip domain-name lab.local
+!
+enable secret Lab-Enable1!
+service password-encryption
+!
+username admin privilege 15 secret Lab-Admin1!
+! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+username cisco privilege 15 secret cisco
+!
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+!
+line con 0
+ login local
+ exec-timeout 30 0
+ logging synchronous
+! SSH open to everyone on purpose - used to test the VOICE-RESTRICT ACL on SW-DIST2
+line vty 0 4
+ transport input ssh telnet
+ login local
+!
+clock timezone AEST 10 0
+ntp server 192.168.30.1
+!
+interface GigabitEthernet0/0
+ description SERVERS VLAN 30 - SW-ACC2 Gi1/0
+ ip address 192.168.30.10 255.255.255.0
+ no shutdown
+!
+ip route 0.0.0.0 0.0.0.0 192.168.30.1
+!
+! ---- DHCP (reached via ip helper-address relays on SW-DIST1/SW-DIST2) ----
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp excluded-address 192.168.50.1 192.168.50.10
+ip dhcp excluded-address 192.168.99.1 192.168.99.99
+!
+ip dhcp pool DATA
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 192.168.30.10
+ domain-name lab.local
+!
+ip dhcp pool VOICE
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 192.168.30.10
+ domain-name lab.local
+!
+ip dhcp pool WIRELESS
+ network 192.168.50.0 255.255.255.0
+ default-router 192.168.50.1
+ dns-server 192.168.30.10
+ domain-name lab.local
+!
+! New in the CML version: PC-ADMIN uses DHCP (DAI on VLAN 99 would drop a static host)
+ip dhcp pool MGMT
+ network 192.168.99.0 255.255.255.0
+ default-router 192.168.99.1
+ dns-server 192.168.30.10
+ domain-name lab.local
+!
+! ---- DNS ----
+ip dns server
+ip host server1.lab.local 192.168.30.10
+ip host r1.lab.local 203.0.113.5
+ip host isp0.lab.local 8.8.8.8
+!
+! ---- HTTP (exercises the "permit tcp any host 203.0.113.5 eq www" line on R1) ----
+ip http server
+!
+! ---- TFTP: serves its own startup-config (IOS can serve, not receive, TFTP) ----
+tftp-server nvram:startup-config
+!
+end
