@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""Build ccna-lab.yaml (CML topology) from the device configs in configs/.
+"""Build the CML lab files from the device configs.
 
-Edit a config in configs/, then run:  python3 build_topology.py
+- ccna-lab.yaml                  full lab (16 nodes), configs in configs/
+- free/<lab>/<lab>.yaml           3 small labs (5 nodes max, fits CML-Free),
+                                  configs in free/<lab>/configs/
+
+Edit a config, then run:  python3 build_topology.py
 """
 
 from pathlib import Path
@@ -9,7 +13,6 @@ from pathlib import Path
 import yaml
 
 HERE = Path(__file__).parent
-CONFIGS = HERE / "configs"
 
 IOSV_PORTS = [f"GigabitEthernet0/{i}" for i in range(4)]
 IOSVL2_PORTS = [f"GigabitEthernet{s}/{p}" for s in range(2) for p in range(4)]
@@ -32,7 +35,7 @@ def host_config(name, static=None):
     return "\n".join(lines) + "\n"
 
 
-# label: (node_definition, x, y, config source)
+# label: (node_definition, x, y, config file or Alpine boot script)
 NODES = {
     "ISP0": ("iosv", 0, -400, "isp0.txt"),
     "R1-EDGE": ("iosv", 0, -250, "r1-edge.txt"),
@@ -76,6 +79,73 @@ LINKS = [
     ("SW-ACC2", "GigabitEthernet1/1", "PC-VOICE", "eth0"),
 ]
 
+DHCP_PC1 = host_config("PC1")
+
+# Small labs for CML-Free (5 nodes max). Same addressing as the full lab.
+FREE_LABS = {
+    "lab1-switching": {
+        "title": "CCNA-LAB 1 - Switching (CML-Free)",
+        "description": "VLANs, trunks, EtherChannel (LACP), Rapid PVST+, HSRP, "
+                       "inter-VLAN routing, DHCP snooping, DAI and port security.",
+        "nodes": {
+            "SW-DIST1": ("iosvl2", -200, -80, "sw-dist1.txt"),
+            "SW-DIST2": ("iosvl2", 200, -80, "sw-dist2.txt"),
+            "SW-ACC1": ("iosvl2", -200, 150, "sw-acc1.txt"),
+            "SW-ACC2": ("iosvl2", 200, 150, "sw-acc2.txt"),
+            "PC1": ("alpine", -200, 320, DHCP_PC1),
+        },
+        "links": [
+            ("SW-DIST1", "GigabitEthernet0/2", "SW-DIST2", "GigabitEthernet0/2"),
+            ("SW-DIST1", "GigabitEthernet0/3", "SW-DIST2", "GigabitEthernet0/3"),
+            ("SW-DIST1", "GigabitEthernet1/0", "SW-ACC1", "GigabitEthernet0/0"),
+            ("SW-DIST1", "GigabitEthernet1/1", "SW-ACC1", "GigabitEthernet0/1"),
+            ("SW-DIST2", "GigabitEthernet1/0", "SW-ACC2", "GigabitEthernet0/0"),
+            ("SW-DIST2", "GigabitEthernet1/1", "SW-ACC2", "GigabitEthernet0/1"),
+            ("SW-ACC1", "GigabitEthernet0/2", "PC1", "eth0"),
+        ],
+    },
+    "lab2-routing": {
+        "title": "CCNA-LAB 2 - Routing & edge (CML-Free)",
+        "description": "OSPF (p2p + DR/BDR), static and floating static routes, "
+                       "NAT/PAT, NTP, extended ACL, HSRP.",
+        "nodes": {
+            "ISP0": ("iosv", 0, -400, "isp0.txt"),
+            "R1-EDGE": ("iosv", 0, -250, "r1-edge.txt"),
+            "SW-DIST1": ("iosvl2", -200, -80, "sw-dist1.txt"),
+            "SW-DIST2": ("iosvl2", 200, -80, "sw-dist2.txt"),
+            "R2-BRANCH": ("iosv", 0, 100, "r2-branch.txt"),
+        },
+        "links": [
+            ("ISP0", "GigabitEthernet0/0", "R1-EDGE", "GigabitEthernet0/0"),
+            ("R1-EDGE", "GigabitEthernet0/1", "SW-DIST1", "GigabitEthernet0/0"),
+            ("R1-EDGE", "GigabitEthernet0/2", "SW-DIST2", "GigabitEthernet0/0"),
+            ("SW-DIST1", "GigabitEthernet0/1", "R2-BRANCH", "GigabitEthernet0/0"),
+            ("SW-DIST2", "GigabitEthernet0/1", "R2-BRANCH", "GigabitEthernet0/1"),
+            ("SW-DIST1", "GigabitEthernet0/2", "SW-DIST2", "GigabitEthernet0/2"),
+            ("SW-DIST1", "GigabitEthernet0/3", "SW-DIST2", "GigabitEthernet0/3"),
+        ],
+    },
+    "lab3-services": {
+        "title": "CCNA-LAB 3 - Services (CML-Free)",
+        "description": "DHCP relay, DNS, NTP, SSH + VTY ACL, SNMPv3, syslog "
+                       "config, HTTP/TFTP, DHCP snooping and DAI.",
+        "nodes": {
+            "R1-EDGE": ("iosv", 0, -250, "r1-edge.txt"),
+            "SW-DIST1": ("iosvl2", 0, -80, "sw-dist1.txt"),
+            "SW-ACC1": ("iosvl2", 0, 100, "sw-acc1.txt"),
+            "PC1": ("alpine", -150, 260, DHCP_PC1),
+            "SERVER1": ("iosv", 150, 260, "server1.txt"),
+        },
+        "links": [
+            ("R1-EDGE", "GigabitEthernet0/1", "SW-DIST1", "GigabitEthernet0/0"),
+            ("SW-DIST1", "GigabitEthernet1/0", "SW-ACC1", "GigabitEthernet0/0"),
+            ("SW-DIST1", "GigabitEthernet1/1", "SW-ACC1", "GigabitEthernet0/1"),
+            ("SW-ACC1", "GigabitEthernet0/2", "PC1", "eth0"),
+            ("SW-ACC1", "GigabitEthernet1/2", "SERVER1", "GigabitEthernet0/0"),
+        ],
+    },
+}
+
 
 class _Literal(str):
     pass
@@ -86,15 +156,15 @@ yaml.add_representer(
 )
 
 
-def build():
+def build(title, description, node_defs, link_defs, config_dir, notes):
     nodes, iface_ids = [], {}
-    for n, (label, (ndef, x, y, cfg)) in enumerate(NODES.items()):
+    for n, (label, (ndef, x, y, cfg)) in enumerate(node_defs.items()):
         node_id = f"n{n}"
         if ndef == "alpine":
             ports, config = ["eth0"], cfg
         else:
             ports = IOSV_PORTS if ndef == "iosv" else IOSVL2_PORTS
-            config = (CONFIGS / cfg).read_text()
+            config = (config_dir / cfg).read_text()
         interfaces = []
         if ndef != "alpine":
             interfaces.append({"id": "i0", "label": "Loopback0", "type": "loopback"})
@@ -114,7 +184,7 @@ def build():
         })
 
     links = []
-    for n, (a, pa, b, pb) in enumerate(LINKS):
+    for n, (a, pa, b, pb) in enumerate(link_defs):
         n1, i1 = iface_ids[(a, pa)]
         n2, i2 = iface_ids[(b, pb)]
         links.append({"id": f"l{n}", "n1": n1, "i1": i1, "n2": n2, "i2": i2,
@@ -122,11 +192,9 @@ def build():
 
     return {
         "lab": {
-            "title": "CCNA-LAB (CML)",
-            "description": "CML port of the CCNA Packet Tracer lab: OSPF, HSRP, "
-                           "EtherChannel, STP, NAT, static/floating routes, DHCP relay, "
-                           "ACLs and L2 security.",
-            "notes": "See cml-lab/README.md in the CCNA repo.",
+            "title": title,
+            "description": description,
+            "notes": notes,
             "version": "0.2.2",
         },
         "nodes": nodes,
@@ -135,7 +203,20 @@ def build():
     }
 
 
+def write(path, topology):
+    path.write_text(yaml.dump(topology, sort_keys=False, width=1000))
+    print(f"wrote {path.relative_to(HERE)}")
+
+
 if __name__ == "__main__":
-    out = HERE / "ccna-lab.yaml"
-    out.write_text(yaml.dump(build(), sort_keys=False, width=1000))
-    print(f"wrote {out}")
+    write(HERE / "ccna-lab.yaml", build(
+        "CCNA-LAB (CML)",
+        "CML port of the CCNA Packet Tracer lab: OSPF, HSRP, EtherChannel, STP, "
+        "NAT, static/floating routes, DHCP relay, ACLs and L2 security.",
+        NODES, LINKS, HERE / "configs", "See cml-lab/README.md in the CCNA repo."))
+    for name, lab in FREE_LABS.items():
+        lab_dir = HERE / "free" / name
+        assert len(lab["nodes"]) <= 5, f"{name} exceeds the CML-Free node limit"
+        write(lab_dir / f"{name}.yaml", build(
+            lab["title"], lab["description"], lab["nodes"], lab["links"],
+            lab_dir / "configs", "See cml-lab/free/README.md in the CCNA repo."))

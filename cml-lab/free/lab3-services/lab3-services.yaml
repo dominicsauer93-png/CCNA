@@ -1,0 +1,717 @@
+lab:
+  title: CCNA-LAB 3 - Services (CML-Free)
+  description: DHCP relay, DNS, NTP, SSH + VTY ACL, SNMPv3, syslog config, HTTP/TFTP, DHCP snooping and DAI.
+  notes: See cml-lab/free/README.md in the CCNA repo.
+  version: 0.2.2
+nodes:
+- id: n0
+  label: R1-EDGE
+  node_definition: iosv
+  x: 0
+  y: -250
+  configuration: |
+    ! R1-EDGE - Lab 3 (services). CML: IOSv
+    ! Gi0/1 = SW-DIST1. Lo1 = simulated Internet host 8.8.8.8 (no ISP0 in this lab)
+    hostname R1-EDGE
+    no ip domain-lookup
+    ip domain-name lab.local
+    !
+    enable secret Lab-Enable1!
+    service password-encryption
+    !
+    username admin privilege 15 secret Lab-Admin1!
+    ! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+    username cisco privilege 15 secret cisco
+    !
+    banner motd #
+    ***********************************************************
+    * R1-EDGE - CCNA-LAB Internet edge / NAT router.          *
+    * Authorized lab use only. All access logged.             *
+    ***********************************************************
+    #
+    !
+    crypto key generate rsa general-keys modulus 2048
+    ip ssh version 2
+    ip ssh time-out 60
+    ip ssh authentication-retries 3
+    !
+    ip access-list standard MGMT-ACCESS
+     permit 192.168.99.0 0.0.0.255
+     deny   any
+    !
+    line con 0
+     login local
+     exec-timeout 30 0
+     logging synchronous
+    line vty 0 4
+     transport input ssh
+     login local
+     access-class MGMT-ACCESS in
+     exec-timeout 10 0
+     logging synchronous
+    !
+    service timestamps log datetime msec
+    logging buffered 16384
+    logging host 192.168.30.10
+    !
+    clock timezone AEST 10 0
+    !
+    snmp-server group SNMP-ADMINS v3 priv
+    snmp-server user snmpadmin SNMP-ADMINS v3 auth sha Lab-SnmpAuth1! priv aes 128 Lab-SnmpPriv1!
+    snmp-server host 192.168.30.10 version 3 priv snmpadmin
+    !
+    interface Loopback0
+     description OSPF Router ID
+     ip address 1.1.1.1 255.255.255.255
+    !
+    interface GigabitEthernet0/1
+     description Inside - link to SW-DIST1
+     ip address 10.0.12.1 255.255.255.252
+     ip ospf network point-to-point
+     no shutdown
+    !
+    router ospf 1
+     router-id 1.1.1.1
+     network 1.1.1.1 0.0.0.0 area 0
+     network 10.0.12.0 0.0.0.3 area 0
+     default-information originate always
+    !
+    interface Loopback1
+     description Simulated Internet host - ping target
+     ip address 8.8.8.8 255.255.255.255
+    !
+    ! NTP source for this lab (ISP0 is in Lab 2)
+    ntp master 2
+    !
+    interface GigabitEthernet0/0
+     description Unused in this lab
+     shutdown
+    !
+    interface range GigabitEthernet0/2 - 3
+     description Unused in this lab
+     shutdown
+    !
+    end
+  tags: []
+  interfaces:
+  - id: i0
+    label: Loopback0
+    type: loopback
+  - id: i1
+    label: GigabitEthernet0/0
+    slot: 0
+    type: physical
+  - id: i2
+    label: GigabitEthernet0/1
+    slot: 1
+    type: physical
+  - id: i3
+    label: GigabitEthernet0/2
+    slot: 2
+    type: physical
+  - id: i4
+    label: GigabitEthernet0/3
+    slot: 3
+    type: physical
+- id: n1
+  label: SW-DIST1
+  node_definition: iosvl2
+  x: 0
+  y: -80
+  configuration: |
+    ! SW-DIST1 - Lab 3 (services). CML: IOSvL2
+    ! Gi0/0 = R1-EDGE (routed, OSPF p2p), Gi1/0-1 = Po10 uplink to SW-ACC1
+    ! Only distribution switch in this lab, so it is HSRP active for every VLAN
+    hostname SW-DIST1
+    no ip domain-lookup
+    ip domain-name lab.local
+    !
+    enable secret Lab-Enable1!
+    service password-encryption
+    !
+    username admin privilege 15 secret Lab-Admin1!
+    ! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+    username cisco privilege 15 secret cisco
+    !
+    banner motd #
+    ***********************************************************
+    * SW-DIST1 - CCNA-LAB distribution switch #1.             *
+    * Authorized lab use only. All access logged.             *
+    ***********************************************************
+    #
+    !
+    crypto key generate rsa general-keys modulus 2048
+    ip ssh version 2
+    ip ssh time-out 60
+    ip ssh authentication-retries 3
+    !
+    ip routing
+    !
+    ip access-list standard MGMT-ACCESS
+     permit 192.168.99.0 0.0.0.255
+     deny   any
+    !
+    line con 0
+     login local
+     exec-timeout 30 0
+     logging synchronous
+    line vty 0 4
+     transport input ssh
+     login local
+     access-class MGMT-ACCESS in
+     exec-timeout 10 0
+     logging synchronous
+    !
+    service timestamps log datetime msec
+    logging buffered 16384
+    logging host 192.168.30.10
+    !
+    clock timezone AEST 10 0
+    ntp server 10.0.12.1
+    !
+    snmp-server group SNMP-ADMINS v3 priv
+    snmp-server user snmpadmin SNMP-ADMINS v3 auth sha Lab-SnmpAuth1! priv aes 128 Lab-SnmpPriv1!
+    snmp-server host 192.168.30.10 version 3 priv snmpadmin
+    !
+    cdp run
+    lldp run
+    !
+    vlan 10
+     name DATA
+    vlan 20
+     name VOICE
+    vlan 30
+     name SERVERS
+    vlan 50
+     name WIRELESS
+    vlan 99
+     name MGMT
+    vlan 999
+     name NATIVE_UNUSED
+    !
+    spanning-tree mode rapid-pvst
+    spanning-tree vlan 10,30,99 root primary
+    spanning-tree vlan 20,50 root secondary
+    spanning-tree portfast bpduguard default
+    spanning-tree loopguard default
+    !
+    ip dhcp snooping vlan 10,20,50,99
+    no ip dhcp snooping information option
+    ip dhcp snooping
+    ip arp inspection vlan 10,20,50,99
+    !
+    interface Loopback0
+     description OSPF Router ID
+     ip address 2.2.2.2 255.255.255.255
+    !
+    interface GigabitEthernet0/0
+     description Routed link to R1-EDGE
+     no switchport
+     ip address 10.0.12.2 255.255.255.252
+     ip ospf network point-to-point
+     no shutdown
+    !
+    interface range GigabitEthernet1/0 - 1
+     description Po10 member - uplink to SW-ACC1
+     switchport trunk encapsulation dot1q
+     switchport trunk native vlan 999
+     switchport trunk allowed vlan 10,20,30,50,99
+     switchport mode trunk
+     switchport nonegotiate
+     channel-group 10 mode active
+     no shutdown
+    !
+    interface Port-channel10
+     description Uplink to SW-ACC1
+     switchport trunk encapsulation dot1q
+     switchport trunk native vlan 999
+     switchport trunk allowed vlan 10,20,30,50,99
+     switchport mode trunk
+     switchport nonegotiate
+     ip dhcp snooping trust
+     ip arp inspection trust
+    !
+    interface range GigabitEthernet1/2 - 3
+     description Unused
+     shutdown
+    !
+    interface Vlan10
+     description DATA
+     ip address 192.168.10.2 255.255.255.0
+     ip helper-address 192.168.30.10
+     ip ospf priority 200
+     standby 10 ip 192.168.10.1
+     standby 10 priority 110
+     standby 10 preempt
+     standby 10 authentication CcnaLab1
+     no shutdown
+    !
+    interface Vlan20
+     description VOICE
+     ip address 192.168.20.2 255.255.255.0
+     ip helper-address 192.168.30.10
+     ip ospf priority 0
+     standby 20 ip 192.168.20.1
+     standby 20 priority 90
+     standby 20 preempt
+     standby 20 authentication CcnaLab1
+     no shutdown
+    !
+    interface Vlan30
+     description SERVERS
+     ip address 192.168.30.2 255.255.255.0
+     ip ospf priority 200
+     standby 30 ip 192.168.30.1
+     standby 30 priority 110
+     standby 30 preempt
+     standby 30 authentication CcnaLab1
+     no shutdown
+    !
+    interface Vlan50
+     description WIRELESS
+     ip address 192.168.50.2 255.255.255.0
+     ip helper-address 192.168.30.10
+     ip ospf priority 0
+     standby 50 ip 192.168.50.1
+     standby 50 priority 90
+     standby 50 preempt
+     standby 50 authentication CcnaLab1
+     no shutdown
+    !
+    interface Vlan99
+     description MGMT
+     ip address 192.168.99.2 255.255.255.0
+     ip helper-address 192.168.30.10
+     ip ospf priority 200
+     standby 99 ip 192.168.99.1
+     standby 99 priority 110
+     standby 99 preempt
+     standby 99 authentication CcnaLab1
+     no shutdown
+    !
+    router ospf 1
+     router-id 2.2.2.2
+     network 2.2.2.2 0.0.0.0 area 0
+     network 10.0.12.0 0.0.0.3 area 0
+     network 192.168.10.0 0.0.0.255 area 0
+     network 192.168.20.0 0.0.0.255 area 0
+     network 192.168.30.0 0.0.0.255 area 0
+     network 192.168.50.0 0.0.0.255 area 0
+     network 192.168.99.0 0.0.0.255 area 0
+    !
+    interface range GigabitEthernet0/1 - 3
+     description Unused in this lab
+     shutdown
+    !
+    end
+  tags: []
+  interfaces:
+  - id: i0
+    label: Loopback0
+    type: loopback
+  - id: i1
+    label: GigabitEthernet0/0
+    slot: 0
+    type: physical
+  - id: i2
+    label: GigabitEthernet0/1
+    slot: 1
+    type: physical
+  - id: i3
+    label: GigabitEthernet0/2
+    slot: 2
+    type: physical
+  - id: i4
+    label: GigabitEthernet0/3
+    slot: 3
+    type: physical
+  - id: i5
+    label: GigabitEthernet1/0
+    slot: 4
+    type: physical
+  - id: i6
+    label: GigabitEthernet1/1
+    slot: 5
+    type: physical
+  - id: i7
+    label: GigabitEthernet1/2
+    slot: 6
+    type: physical
+  - id: i8
+    label: GigabitEthernet1/3
+    slot: 7
+    type: physical
+- id: n2
+  label: SW-ACC1
+  node_definition: iosvl2
+  x: 0
+  y: 100
+  configuration: |
+    ! SW-ACC1 - Lab 3 (services). CML: IOSvL2
+    ! Gi0/0-1 = Po1 uplink to SW-DIST1, Gi0/2 = PC1 (VLAN 10), Gi1/2 = SERVER1 (VLAN 30)
+    hostname SW-ACC1
+    no ip domain-lookup
+    ip domain-name lab.local
+    !
+    enable secret Lab-Enable1!
+    service password-encryption
+    !
+    username admin privilege 15 secret Lab-Admin1!
+    ! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+    username cisco privilege 15 secret cisco
+    !
+    banner motd #
+    ***********************************************************
+    * SW-ACC1 - CCNA-LAB access switch #1.                    *
+    * Authorized lab use only. All access logged.             *
+    ***********************************************************
+    #
+    !
+    crypto key generate rsa general-keys modulus 2048
+    ip ssh version 2
+    ip ssh time-out 60
+    ip ssh authentication-retries 3
+    !
+    ip access-list standard MGMT-ACCESS
+     permit 192.168.99.0 0.0.0.255
+     deny   any
+    !
+    line con 0
+     login local
+     exec-timeout 30 0
+     logging synchronous
+    line vty 0 4
+     transport input ssh
+     login local
+     access-class MGMT-ACCESS in
+     exec-timeout 10 0
+     logging synchronous
+    !
+    service timestamps log datetime msec
+    logging buffered 16384
+    logging host 192.168.30.10
+    !
+    clock timezone AEST 10 0
+    ntp server 192.168.99.2
+    !
+    cdp run
+    lldp run
+    !
+    vlan 10
+     name DATA
+    vlan 20
+     name VOICE
+    vlan 30
+     name SERVERS
+    vlan 50
+     name WIRELESS
+    vlan 99
+     name MGMT
+    vlan 999
+     name NATIVE_UNUSED
+    !
+    spanning-tree mode rapid-pvst
+    spanning-tree portfast bpduguard default
+    spanning-tree loopguard default
+    !
+    ip dhcp snooping vlan 10,20,50,99
+    no ip dhcp snooping information option
+    ip dhcp snooping
+    ip arp inspection vlan 10,20,50,99
+    !
+    interface Vlan1
+     no ip address
+     shutdown
+    !
+    interface Vlan99
+     description MGMT
+     ip address 192.168.99.10 255.255.255.0
+     no shutdown
+    !
+    ip default-gateway 192.168.99.1
+    !
+    interface range GigabitEthernet0/0 - 1
+     description Po1 member - uplink to SW-DIST1
+     switchport trunk encapsulation dot1q
+     switchport trunk native vlan 999
+     switchport trunk allowed vlan 10,20,30,50,99
+     switchport mode trunk
+     switchport nonegotiate
+     channel-group 1 mode active
+     no shutdown
+    !
+    interface Port-channel1
+     description Uplink to SW-DIST1
+     switchport trunk encapsulation dot1q
+     switchport trunk native vlan 999
+     switchport trunk allowed vlan 10,20,30,50,99
+     switchport mode trunk
+     switchport nonegotiate
+     ip dhcp snooping trust
+     ip arp inspection trust
+    !
+    interface GigabitEthernet0/2
+     description PC1
+     switchport mode access
+     switchport access vlan 10
+     switchport nonegotiate
+     spanning-tree portfast edge
+     spanning-tree bpduguard enable
+     switchport port-security
+     switchport port-security maximum 2
+     switchport port-security mac-address sticky
+     switchport port-security violation restrict
+     no shutdown
+    !
+    interface GigabitEthernet0/3
+     description PC2 + IP phone (data + voice)
+     switchport mode access
+     switchport access vlan 10
+     switchport voice vlan 20
+     switchport nonegotiate
+     spanning-tree portfast edge
+     spanning-tree bpduguard enable
+     switchport port-security
+     switchport port-security maximum 3
+     switchport port-security mac-address sticky
+     switchport port-security violation restrict
+     no shutdown
+    !
+    interface GigabitEthernet1/0
+     description PC-ADMIN
+     switchport mode access
+     switchport access vlan 99
+     switchport nonegotiate
+     spanning-tree portfast edge
+     spanning-tree bpduguard enable
+     switchport port-security
+     switchport port-security maximum 1
+     switchport port-security mac-address sticky
+     switchport port-security violation restrict
+     no shutdown
+    !
+    interface GigabitEthernet1/1
+     description PC-WIFI (stands in for the wireless client)
+     switchport mode access
+     switchport access vlan 50
+     switchport nonegotiate
+     spanning-tree portfast edge
+     spanning-tree bpduguard enable
+     switchport port-security
+     switchport port-security maximum 2
+     switchport port-security mac-address sticky
+     switchport port-security violation restrict
+     no shutdown
+    !
+    interface GigabitEthernet1/2
+     description SERVER1 (DHCP/DNS/NTP/TFTP/HTTP)
+     switchport mode access
+     switchport access vlan 30
+     switchport nonegotiate
+     spanning-tree portfast edge
+     spanning-tree bpduguard enable
+     switchport port-security
+     switchport port-security maximum 1
+     switchport port-security mac-address sticky
+     switchport port-security violation restrict
+     no shutdown
+    !
+    interface GigabitEthernet1/3
+     description Unused in this lab
+     shutdown
+    !
+    end
+  tags: []
+  interfaces:
+  - id: i0
+    label: Loopback0
+    type: loopback
+  - id: i1
+    label: GigabitEthernet0/0
+    slot: 0
+    type: physical
+  - id: i2
+    label: GigabitEthernet0/1
+    slot: 1
+    type: physical
+  - id: i3
+    label: GigabitEthernet0/2
+    slot: 2
+    type: physical
+  - id: i4
+    label: GigabitEthernet0/3
+    slot: 3
+    type: physical
+  - id: i5
+    label: GigabitEthernet1/0
+    slot: 4
+    type: physical
+  - id: i6
+    label: GigabitEthernet1/1
+    slot: 5
+    type: physical
+  - id: i7
+    label: GigabitEthernet1/2
+    slot: 6
+    type: physical
+  - id: i8
+    label: GigabitEthernet1/3
+    slot: 7
+    type: physical
+- id: n3
+  label: PC1
+  node_definition: alpine
+  x: -150
+  y: 260
+  configuration: |
+    # this is a shell script which will be sourced at boot
+    hostname PC1
+    USERNAME=cisco
+    PASSWORD=cisco
+    ip link set eth0 up
+    udhcpc -i eth0 -b -t 10 -T 3
+  tags: []
+  interfaces:
+  - id: i0
+    label: eth0
+    slot: 0
+    type: physical
+- id: n4
+  label: SERVER1
+  node_definition: iosv
+  x: 150
+  y: 260
+  configuration: |
+    ! SERVER1 - Lab 3 (services). DHCP / DNS / NTP / TFTP / HTTP server (CML: IOSv acting as a server)
+    ! Replaces the Packet Tracer "Generic Server". Gi0/0 = SW-ACC1 Gi1/2 (VLAN 30)
+    ! Not possible on IOS: a syslog *receiver*. Use "show logging" on each device instead.
+    hostname SERVER1
+    no ip domain-lookup
+    ip domain-name lab.local
+    !
+    enable secret Lab-Enable1!
+    service password-encryption
+    !
+    username admin privilege 15 secret Lab-Admin1!
+    ! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+    username cisco privilege 15 secret cisco
+    !
+    crypto key generate rsa general-keys modulus 2048
+    ip ssh version 2
+    !
+    line con 0
+     login local
+     exec-timeout 30 0
+     logging synchronous
+    ! SSH open to everyone on purpose - used to test the VOICE-RESTRICT ACL on SW-DIST2
+    line vty 0 4
+     transport input ssh telnet
+     login local
+    !
+    clock timezone AEST 10 0
+    ntp server 192.168.30.1
+    !
+    interface GigabitEthernet0/0
+     description SERVERS VLAN 30 - SW-ACC1 Gi1/2
+     ip address 192.168.30.10 255.255.255.0
+     no shutdown
+    !
+    ip route 0.0.0.0 0.0.0.0 192.168.30.1
+    !
+    ! ---- DHCP (reached via ip helper-address relays on SW-DIST1/SW-DIST2) ----
+    ip dhcp excluded-address 192.168.10.1 192.168.10.10
+    ip dhcp excluded-address 192.168.20.1 192.168.20.10
+    ip dhcp excluded-address 192.168.50.1 192.168.50.10
+    ip dhcp excluded-address 192.168.99.1 192.168.99.99
+    !
+    ip dhcp pool DATA
+     network 192.168.10.0 255.255.255.0
+     default-router 192.168.10.1
+     dns-server 192.168.30.10
+     domain-name lab.local
+    !
+    ip dhcp pool VOICE
+     network 192.168.20.0 255.255.255.0
+     default-router 192.168.20.1
+     dns-server 192.168.30.10
+     domain-name lab.local
+    !
+    ip dhcp pool WIRELESS
+     network 192.168.50.0 255.255.255.0
+     default-router 192.168.50.1
+     dns-server 192.168.30.10
+     domain-name lab.local
+    !
+    ! New in the CML version: PC-ADMIN uses DHCP (DAI on VLAN 99 would drop a static host)
+    ip dhcp pool MGMT
+     network 192.168.99.0 255.255.255.0
+     default-router 192.168.99.1
+     dns-server 192.168.30.10
+     domain-name lab.local
+    !
+    ! ---- DNS ----
+    ip dns server
+    ip host server1.lab.local 192.168.30.10
+    ip host r1.lab.local 203.0.113.5
+    ip host isp0.lab.local 8.8.8.8
+    !
+    ! ---- HTTP (exercises the "permit tcp any host 203.0.113.5 eq www" line on R1) ----
+    ip http server
+    !
+    ! ---- TFTP: serves its own startup-config (IOS can serve, not receive, TFTP) ----
+    tftp-server nvram:startup-config
+    !
+    end
+  tags: []
+  interfaces:
+  - id: i0
+    label: Loopback0
+    type: loopback
+  - id: i1
+    label: GigabitEthernet0/0
+    slot: 0
+    type: physical
+  - id: i2
+    label: GigabitEthernet0/1
+    slot: 1
+    type: physical
+  - id: i3
+    label: GigabitEthernet0/2
+    slot: 2
+    type: physical
+  - id: i4
+    label: GigabitEthernet0/3
+    slot: 3
+    type: physical
+links:
+- id: l0
+  n1: n0
+  i1: i2
+  n2: n1
+  i2: i1
+  label: R1-EDGE GigabitEthernet0/1 <-> SW-DIST1 GigabitEthernet0/0
+- id: l1
+  n1: n1
+  i1: i5
+  n2: n2
+  i2: i1
+  label: SW-DIST1 GigabitEthernet1/0 <-> SW-ACC1 GigabitEthernet0/0
+- id: l2
+  n1: n1
+  i1: i6
+  n2: n2
+  i2: i2
+  label: SW-DIST1 GigabitEthernet1/1 <-> SW-ACC1 GigabitEthernet0/1
+- id: l3
+  n1: n2
+  i1: i3
+  n2: n3
+  i2: i0
+  label: SW-ACC1 GigabitEthernet0/2 <-> PC1 eth0
+- id: l4
+  n1: n2
+  i1: i7
+  n2: n4
+  i2: i1
+  label: SW-ACC1 GigabitEthernet1/2 <-> SERVER1 GigabitEthernet0/0
+annotations: []

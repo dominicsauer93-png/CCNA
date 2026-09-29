@@ -4,11 +4,15 @@ A port of [`../packet-tracer-lab/`](../packet-tracer-lab/) to Cisco Modeling
 Labs (CML). Same design, addressing, VLANs, OSPF, HSRP, EtherChannel, NAT,
 static/floating routes, ACLs and L2 security — running on real IOS images.
 
+> **On CML-Free (5 nodes max)?** Use the three small labs in
+> [`free/`](free/) instead of the full lab below.
+
 | File | What it is |
 |---|---|
 | `ccna-lab.yaml` | The CML lab file — import this. |
 | `configs/*.txt` | Startup config of each device (already inside the YAML). |
-| `build_topology.py` | Rebuilds `ccna-lab.yaml` after you edit a config. |
+| `free/` | The same lab split into 3 labs of 5 nodes each (CML-Free). |
+| `build_topology.py` | Rebuilds all lab files after you edit a config. |
 
 ## 1. Import and start
 
@@ -86,4 +90,4 @@ with these CML substitutions:
 
 Change a file in `configs/` (or the node/link list in `build_topology.py`),
 then run `python3 build_topology.py` (needs PyYAML) to regenerate
-`ccna-lab.yaml`.
+`ccna-lab.yaml` and the `free/` lab files.

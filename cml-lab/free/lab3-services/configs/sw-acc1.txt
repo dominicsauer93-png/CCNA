@@ -1,0 +1,174 @@
+! SW-ACC1 - Lab 3 (services). CML: IOSvL2
+! Gi0/0-1 = Po1 uplink to SW-DIST1, Gi0/2 = PC1 (VLAN 10), Gi1/2 = SERVER1 (VLAN 30)
+hostname SW-ACC1
+no ip domain-lookup
+ip domain-name lab.local
+!
+enable secret Lab-Enable1!
+service password-encryption
+!
+username admin privilege 15 secret Lab-Admin1!
+! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+username cisco privilege 15 secret cisco
+!
+banner motd #
+***********************************************************
+* SW-ACC1 - CCNA-LAB access switch #1.                    *
+* Authorized lab use only. All access logged.             *
+***********************************************************
+#
+!
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
+ip access-list standard MGMT-ACCESS
+ permit 192.168.99.0 0.0.0.255
+ deny   any
+!
+line con 0
+ login local
+ exec-timeout 30 0
+ logging synchronous
+line vty 0 4
+ transport input ssh
+ login local
+ access-class MGMT-ACCESS in
+ exec-timeout 10 0
+ logging synchronous
+!
+service timestamps log datetime msec
+logging buffered 16384
+logging host 192.168.30.10
+!
+clock timezone AEST 10 0
+ntp server 192.168.99.2
+!
+cdp run
+lldp run
+!
+vlan 10
+ name DATA
+vlan 20
+ name VOICE
+vlan 30
+ name SERVERS
+vlan 50
+ name WIRELESS
+vlan 99
+ name MGMT
+vlan 999
+ name NATIVE_UNUSED
+!
+spanning-tree mode rapid-pvst
+spanning-tree portfast bpduguard default
+spanning-tree loopguard default
+!
+ip dhcp snooping vlan 10,20,50,99
+no ip dhcp snooping information option
+ip dhcp snooping
+ip arp inspection vlan 10,20,50,99
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan99
+ description MGMT
+ ip address 192.168.99.10 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.99.1
+!
+interface range GigabitEthernet0/0 - 1
+ description Po1 member - uplink to SW-DIST1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,50,99
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 1 mode active
+ no shutdown
+!
+interface Port-channel1
+ description Uplink to SW-DIST1
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport trunk allowed vlan 10,20,30,50,99
+ switchport mode trunk
+ switchport nonegotiate
+ ip dhcp snooping trust
+ ip arp inspection trust
+!
+interface GigabitEthernet0/2
+ description PC1
+ switchport mode access
+ switchport access vlan 10
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ no shutdown
+!
+interface GigabitEthernet0/3
+ description PC2 + IP phone (data + voice)
+ switchport mode access
+ switchport access vlan 10
+ switchport voice vlan 20
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 3
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ no shutdown
+!
+interface GigabitEthernet1/0
+ description PC-ADMIN
+ switchport mode access
+ switchport access vlan 99
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ no shutdown
+!
+interface GigabitEthernet1/1
+ description PC-WIFI (stands in for the wireless client)
+ switchport mode access
+ switchport access vlan 50
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 2
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ no shutdown
+!
+interface GigabitEthernet1/2
+ description SERVER1 (DHCP/DNS/NTP/TFTP/HTTP)
+ switchport mode access
+ switchport access vlan 30
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+ switchport port-security
+ switchport port-security maximum 1
+ switchport port-security mac-address sticky
+ switchport port-security violation restrict
+ no shutdown
+!
+interface GigabitEthernet1/3
+ description Unused in this lab
+ shutdown
+!
+end

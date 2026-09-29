@@ -1,0 +1,68 @@
+! R2-BRANCH - Lab 2 (routing & edge). CML: IOSv
+! Gi0/0 = SW-DIST1 (primary WAN), Gi0/1 = SW-DIST2 (backup WAN)
+! Branch LAN is simulated with Loopback1 (no PC5 in this lab)
+hostname R2-BRANCH
+no ip domain-lookup
+ip domain-name lab.local
+!
+enable secret Lab-Enable1!
+service password-encryption
+!
+username admin privilege 15 secret Lab-Admin1!
+! Account used by CML's console automation (cml-mcp / pyATS). Lab use only.
+username cisco privilege 15 secret cisco
+!
+banner motd #
+***********************************************************
+* R2-BRANCH - CCNA-LAB branch router.                     *
+* Authorized lab use only. All access logged.             *
+***********************************************************
+#
+!
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+!
+ip access-list standard MGMT-ACCESS
+ permit 192.168.99.0 0.0.0.255
+ deny   any
+!
+line con 0
+ login local
+ exec-timeout 30 0
+ logging synchronous
+line vty 0 4
+ transport input ssh
+ login local
+ access-class MGMT-ACCESS in
+ exec-timeout 10 0
+ logging synchronous
+!
+service timestamps log datetime msec
+logging buffered 16384
+!
+clock timezone AEST 10 0
+! NTP hierarchy: ISP0 -> R1 -> D1 -> R2
+ntp server 172.16.12.1
+!
+interface GigabitEthernet0/0
+ description Primary WAN - link to SW-DIST1
+ ip address 172.16.12.2 255.255.255.252
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Backup WAN - link to SW-DIST2
+ ip address 172.16.13.2 255.255.255.252
+ no shutdown
+!
+! Primary default route
+ip route 0.0.0.0 0.0.0.0 172.16.12.1
+! Floating static default route (AD 200) - only used if the primary is withdrawn
+ip route 0.0.0.0 0.0.0.0 172.16.13.1 200
+!
+interface Loopback1
+ description Branch LAN (simulated - replaces Gi0/2 + PC5)
+ ip address 192.168.40.1 255.255.255.0
+!
+end
