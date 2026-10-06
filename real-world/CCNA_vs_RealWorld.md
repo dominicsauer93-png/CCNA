@@ -260,3 +260,30 @@ Not CCNA exam content — closest concepts are WAN design (1.2) and QoS (4.7), b
 **Takeaway / next action**
 
 The caching redirect entry above explains the caching mechanism; this is the failure mode when the requesting subnet isn't one the cache knows how to serve. Fix is either: point the download's source-interface at an interface/subnet that already has CACHE-SRV access, or get VLAN X added to whatever routing/ACL/cache-mapping controls reachability to that regional CACHE-SRV node. Worth checking source-interface config on any ISR before assuming a failed firmware download is a bad file or a dead CACHE-SRV node — a source-address/reachability mismatch looks identical from the CLI.
+
+## Live Issue — Wireless Clients Get No IP After RADIUS Assigns a VLAN (Instant AP Cluster)
+
+**📊 Level:** CCNA + Vendor — VLANs, trunks and allowed-VLAN lists are CCNA (2.1, 2.2); 802.1X/RADIUS is CCNA (5.x); dynamic VLAN assignment and Aruba Instant virtual controller forwarding are vendor-specific.
+
+***🧠 What CCNA already gave me:*** *A switch only forwards a VLAN that exists in its VLAN database, and a trunk only carries VLANs on its allowed list — anything else is dropped silently. 802.1X uses RADIUS to authenticate users, and wireless architectures can centralise traffic through a controller.*
+
+**🔧 What's actually happening:** Wireless clients on an Aruba Instant AP cluster authenticate, RADIUS assigns them VLAN X, and then they get no IP address (169.254.x.x), no DNS and no internet. Clients on the virtual controller (VC) AP itself work; clients on member APs don't.
+
+- Step 1 — RADIUS picks the VLAN: on authentication (or a later Change of Authorisation, CoA), RADIUS tells the AP to put the client in VLAN X. The VLAN follows the user, not the switch port, so it can appear on any AP at any time.
+- Step 2 — the member AP tags the traffic: the AP serving the client puts its frames in VLAN X (802.1Q tag) and sends them out its wired uplink.
+- Step 3 — the traffic must reach the VC: in this design the VC AP holds the tunnel to the head-end, and DHCP, DNS and internet for VLAN X are only on the far side of that tunnel. So member AP traffic must cross the site's switches, at Layer 2, to the VC AP.
+- Step 4 — the edge switch drops it: VLAN X didn't exist on the access switches and wasn't allowed on the AP ports or uplinks. A switch silently drops a tagged frame for a VLAN it doesn't have or doesn't allow on that port. The DHCP request never left the first switch.
+- Why only member APs failed: clients on the VC AP never needed to cross the switches. That split points at a Layer 2 path problem, not RADIUS or DHCP.
+- Fix: create VLAN X on every switch in the path and allow it, tagged, on every AP port and every uplink back to the VC AP. With an unbroken Layer 2 path, DHCP, DNS and internet worked.
+
+**Diagnosis commands**
+
+| Check | Cisco | Aruba AOS-CX |
+| --- | --- | --- |
+| VLAN exists on the switch | `show vlan brief` | `show vlan` |
+| VLAN allowed on AP port / uplink | `show interfaces trunk` | `show vlan port <port>` |
+| Client MAC learned in the VLAN (follow it hop by hop) | `show mac address-table vlan <id>` | `show mac-address-table vlan <id>` |
+
+**Takeaway / next action**
+
+With dynamic VLAN assignment, a VLAN must be carried on every path from every AP to wherever that VLAN is forwarded (here, the VC AP), not just the ports you expected to use it. When some wireless clients get no IP and others are fine, compare which AP they're on: if only member APs fail, trace the VLAN hop by hop with the MAC address table — the switch where the client's MAC stops appearing is where the traffic is being dropped.
