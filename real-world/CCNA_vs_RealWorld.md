@@ -8,6 +8,45 @@ Level tags: **CCNA** = on the 200-301 v1.1 blueprint · **CCNP** = next cert up 
 
 All IPs, hostnames, URLs and internal system names are replaced with generic placeholders.
 
+## Study Path Beyond the CCNA
+
+**📊 Level:** CCNA → CCNP + Vendor — maps the topics in these notes and the SOPs to the course or exam that teaches them.
+
+**⚙ Work reference —** most real issues in these notes go past the CCNA. This is where each one is taught, so study can follow the work.
+
+| Topic | Course / exam |
+| --- | --- |
+| VLANs, trunks, STP, OSPF, NAT, 802.1X basics | **CCNA** (200-301) — current |
+| Switch/router upgrades, backups, `configure replace`, HA, wireless basics, SD-WAN basics, automation | **CCNP Enterprise core: ENCOR** (350-401) |
+| Advanced routing, VRF-lite, route filtering, DHCP/relay, VPNs, troubleshooting | **ENARSI** (300-410) — CCNP Enterprise concentration |
+| Catalyst 9800 WLC, AP join, RADIUS VLAN assignment, wireless troubleshooting | **ENWLSI** (300-430) — wireless implementation |
+| Catalyst SD-WAN (vManage, edges, onboarding) | **ENSDWI** (300-415) |
+| Ansible, APIs, Catalyst Center automation | **ENAUTO** (300-435) |
+| ISE (802.1X, CoA, guest), NAC | **CCNP Security: SISE** (300-715) |
+| Firepower / FTD, ASA, VPN | **CCNP Security: SCOR** (350-701), **SNCF** (300-710) |
+| UCS servers, CIMC | **CCNP Data Center: DCCOR** (350-601) |
+| Aruba switching (AOS-CX) | **HPE Aruba Networking ACA / ACP Campus Access** |
+| Aruba wireless (Instant, controllers, Central) | **HPE Aruba Networking ACA / ACP Mobility** |
+| ClearPass | **HPE Aruba Networking ACP Network Security** |
+
+**Planned order**
+
+1. Finish the CCNA.
+2. CCNP Enterprise: ENCOR first (widest match to the SOPs), then one concentration — ENARSI (routing/switching) or ENWLSI (school wireless).
+3. Aruba ACA / ACP Mobility — the sites run Aruba wireless.
+4. Later: SISE if working on ISE / NAC.
+
+**Where to study**
+
+- **Cisco Networking Academy (NetAcad):** CCNA courses, free or low cost through partner institutions (TAFEs often run them).
+- **Cisco U.:** Cisco's paid platform with official CCNA and CCNP courses and labs.
+- **HPE Aruba Networking Learning Center:** Aruba courses and exams.
+- **Labs:** Packet Tracer (CCNA), Cisco Modeling Labs, GNS3 / EVE-NG with the Aruba AOS-CX Simulator, Cisco DevNet Sandboxes (9800 WLC, ISE, Catalyst Center, SD-WAN).
+
+**Takeaway / next action**
+
+Exam codes and versions change every few years (Cisco has been restructuring the wireless exams), so check cisco.com and the HPE Aruba Networking site before booking. Tag each new real-world entry with the course that covers it, so the notes double as a study map.
+
 ## Broadcast Storms & Storm Control
 
 **📊 Level:** CCNP — Storm Control isn't on the CCNA; the STP side is CCNA (2.5).
