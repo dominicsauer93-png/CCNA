@@ -45,11 +45,13 @@ All IPs, hostnames, URLs and internal system names are replaced with generic pla
 
 **Takeaway / next action**
 
-Exam codes and versions change every few years (Cisco has been restructuring the wireless exams), so check cisco.com and the HPE Aruba Networking site before booking. Tag each new real-world entry with the course that covers it, so the notes double as a study map.
+Exam codes and versions change every few years (Cisco has been restructuring the wireless exams), so check cisco.com and the HPE Aruba Networking site before booking. Each entry carries a **📚 Study** line naming the course that covers it, so the notes double as a study map.
 
 ## Broadcast Storms & Storm Control
 
 **📊 Level:** CCNP — Storm Control isn't on the CCNA; the STP side is CCNA (2.5).
+
+**📚 Study:** ENCOR (350-401) — switching hardening and STP
 
 ***🧠 What CCNA already gave me:*** *STP and why it exists — redundant Layer 2 links without it loop traffic endlessly and crash the network. Also already covered the loop-prevention toolkit: Root Guard, Loop Guard, BPDU Guard/Filter.*
 
@@ -62,6 +64,8 @@ STP is the structural fix (blocks the loop). Storm Control is an independent sec
 ## Real Config Example — Hybrid Port on Non-Cisco Gear
 
 **📊 Level:** CCNA + Vendor — 802.1Q tagging and native VLAN are CCNA (2.1, 2.2); the hybrid port type is vendor-specific and not in any Cisco exam.
+
+**📚 Study:** CCNA (2.1, 2.2) for 802.1Q; Comware/VRP CLI is vendor docs only (closest: HPE Aruba ACA Campus Access for non-Cisco switching)
 
 A real interface config, from Comware/VRP-family CLI (H3C/HPE/Huawei-style — `undo`, `display`, `port hybrid` are the giveaways). CCNA only teaches Cisco IOS syntax, so this is worth keeping as a reference for when the gear on-site isn't Cisco.
 
@@ -100,6 +104,8 @@ Biggest gap: CCNA teaches VLAN tagging entirely through Cisco's access/trunk bin
 
 **📊 Level:** CCNA + On-the-job — the pieces (STP, MAC table) are CCNA (2.5, 1.13); step-by-step triage is experience/CCNP.
 
+**📚 Study:** ENCOR (350-401) — Layer 2 troubleshooting
+
 ***🧠 What CCNA already gave me:*** *STP exists to prevent the loops that cause broadcast storms. If STP is doing its job, a storm shouldn't be able to build from a loop — so an active storm points at either a gap in STP coverage (a port that bypassed it) or a non-loop cause STP was never going to catch.*
 
 **🔧 What's actually happening:** Broadcast storms happening now. Building on the STP theory, the practical triage sequence is about finding the source fast, not just knowing why storms happen in principle.
@@ -119,6 +125,8 @@ Knowing STP prevents loops in theory doesn't tell you where THIS storm is coming
 ## Static Null Routes (Null0) — Practical / Work Reference
 
 **📊 Level:** CCNA + CCNP — static routes, AD and floating statics are CCNA (3.3); Null0, RTBH and BGP aggregates are CCNP (ENARSI).
+
+**📚 Study:** ENARSI (300-410) — route summarisation, BGP
 
 **⚙ Work reference —** beyond the CCNA blueprint, but builds on static routing (3.3).
 
@@ -144,6 +152,8 @@ Knowing STP prevents loops in theory doesn't tell you where THIS storm is coming
 
 **📊 Level:** CCNA + CCNP — CCNA (1.12) only asks you to describe it; configuring VRF-lite is CCNP; MPLS L3VPN is the CCNP Service Provider track.
 
+**📚 Study:** CCNA (1.12) concept; ENARSI (300-410) — VRF-lite
+
 **⚙ Work reference —** beyond CCNA coverage so far (1.12 Virtualisation fundamentals — VMs, containers, VRF — is still ⚠ not yet studied on the course).
 
 **🔧 What's actually happening:** A physical router normally has one routing table — the Global routing table — and every interface, route, and forwarding decision on the box belongs to it. VRF (Virtual Routing and Forwarding) lets a single router hold more than one routing table at the same time. Each VRF is its own isolated instance: its own interfaces, its own routing table, its own forwarding table. Traffic in one VRF is never forwarded into another — forwarding only ever happens between interfaces that sit in the same VRF.
@@ -166,6 +176,8 @@ Think of VRF as "one router, many independent routing tables" — same hardware,
 ## SNMP MIBs & OIDs — Cisco Switch Reference
 
 **📊 Level:** CCNA + On-the-job — what SNMP does is CCNA (4.4); individual OIDs and Cisco MIBs are job knowledge, not exam content.
+
+**📚 Study:** CCNA (4.4); ENCOR (350-401) — network assurance and monitoring
 
 **⚙ Work reference —** beyond CCNA coverage so far (4.4 SNMP — ⚠ not yet studied on the course).
 
@@ -270,6 +282,8 @@ Sources:
 
 **📊 Level:** CCNA + Beyond — `copy` with TFTP/FTP is CCNA (4.9); caching proxies and WCCP are beyond the CCNA.
 
+**📚 Study:** No specific course (on-the-job); closest: ENCOR (350-401) — network services
+
 ***🧠 What CCNA already gave me:*** *The copy command (`copy <source> <destination>`) for moving IOS images and configs to/from flash, TFTP, or an HTTP server — already covered as a basic file-management operation, not tied to any specific exam ref.*
 
 **🔧 What's actually happening:** Running `copy http://repo.example.internal/firmware/isr4300-universalk9.<version>.SPA.bin bootflash:` on an ISR4300 to pull down a new IOS image. The request hits the network core, and CACHE-SRV — a caching server sitting there — intercepts it, recognises a local copy of that exact file already exists, and redirects the router to fetch it from there instead of pulling it all the way from the central repository server. Net effect: the download comes from a local/regional source instead of crossing the WAN back to head office.
@@ -287,6 +301,8 @@ Not CCNA exam content — closest concepts are WAN design (1.2) and QoS (4.7), b
 
 **📊 Level:** CCNA — routing table, loopbacks and extended ping are all CCNA (3.1, 3.2); applying them to a real fault is experience.
 
+**📚 Study:** CCNA (3.x); ENARSI (300-410) — routing troubleshooting
+
 ***🧠 What CCNA already gave me:*** *Source address selection for outbound traffic (the routing table picks the egress interface/IP unless a source-interface is explicitly configured) and the VRF concept above — a subnet or interface only has reachability to what it actually has a route/permit to, isolation is never automatic-but-universal.*
 
 **🔧 What's actually happening:** On the CACHE-SRV caching setup (previous entry), some ISRs fail the copy download entirely rather than getting redirected to a local cache — because those ISRs source the request from Loopback0, and Loopback0's address sits in VLAN X. VLAN X has no path to that ISR's local CACHE-SRV instance, so the request can't get there at all.
@@ -303,6 +319,8 @@ The caching redirect entry above explains the caching mechanism; this is the fai
 ## Live Issue — Wireless Clients Get No IP After RADIUS Assigns a VLAN (Instant AP Cluster)
 
 **📊 Level:** CCNA + Vendor — VLANs, trunks and allowed-VLAN lists are CCNA (2.1, 2.2); 802.1X/RADIUS is CCNA (5.x); dynamic VLAN assignment and Aruba Instant virtual controller forwarding are vendor-specific.
+
+**📚 Study:** ENWLSI (300-430); SISE (300-715) for RADIUS/CoA; HPE Aruba ACA/ACP Mobility for Instant
 
 ***🧠 What CCNA already gave me:*** *A switch only forwards a VLAN that exists in its VLAN database, and a trunk only carries VLANs on its allowed list — anything else is dropped silently. 802.1X uses RADIUS to authenticate users, and wireless architectures can centralise traffic through a controller.*
 

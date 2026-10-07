@@ -7,6 +7,7 @@
 - Entry format:
   - `## <Title>`
   - `**📊 Level:** <CCNA / CCNP / Vendor / On-the-job / Beyond> — <one line on which part sits where, with blueprint refs>`
+  - `**📚 Study:** <course/exam that covers it, from the Study Path table — e.g. ENCOR (350-401), ENWLSI (300-430), HPE Aruba ACP Mobility>`
   - `***🧠 What CCNA already gave me:*** *<prior CCNA knowledge>*` — or `**⚙ Work reference —** <why it's included>` when there's no CCNA tie-in yet
   - `**🔧 What's actually happening:** <the real situation, bullets per mechanism>`
   - `**Takeaway / next action**` then the summary
