@@ -62,41 +62,10 @@ Confidence: **High** = sure. **Medium** = check against your video before changi
 
 ---
 
-## E. Community notes (`ccna-community-notes/`)
-
-**What they are:** one person's notes on Jeremy's IT Lab *Complete CCNA 200-301* course (same playlist you follow), Days 1–63. They look like the **v1.0-era cut** of it.
-
-**Evidence they are not v1.1:**
-- Day 63 is Ansible/Puppet/Chef. v1.1 dropped Puppet/Chef and added Terraform.
-- No Terraform and no AI/ML anywhere (searched).
-- They say Root Guard/Loop Guard "probably aren't needed" and have no BPDU Filter. Your doc has full coverage, so either the playlist was updated after these notes, or the extras came from elsewhere. Not confirmed (YouTube is not reachable from this session).
-- **Decision:** your own video notes take priority over these notes. The blueprint is the authority on what is tested.
-
-**Limits:**
-- 882 images are linked from GitHub rather than stored in the repo. Tables, configs and command outputs (e.g. NTP has 34, Wireless Configuration 50) are not in the text, so I cannot verify those parts.
-
-**Accuracy (read in full: STP 2, OSPF 1–3, FHRP, NAT 1–2, NTP, SNMP, Syslog, Port Security, DHCP Snooping, DAI, IPv6 1–3. Checked by search: spine-leaf, TCAM, Chef, cables, PoE.)** Mostly correct. Where they disagree with your doc, **they are right** on spine-leaf and the 50s STP timing. Errors found:
-
-| File | Problem | Correct |
-|---|---|---|
-| First_Hop_Redundancy_Protocols | "FHRPs are non-preemptive" | HSRP preempt is off by default, but **VRRP preempt is on by default**. Not true of all FHRPs. |
-| NTP | "R1 preferred because its stratum is HIGHER" | **Lower** stratum number is better. |
-| OSPF_Part3 | MTU mismatch "can still become neighbours" | Routers get stuck in ExStart/Exchange and never reach Full. |
-| OSPF_Part3 | Lists Frame Relay/X.25 | Obsolete; not tested. |
-| OSPF_Part2 | `R1(config-router)# bandwidth` | `bandwidth` is an **interface** command (`config-if`). |
-| IPv6_Part1 | `R1(config) # no shutdown` | Should be `config-if`. |
-| Several | Typos ("Designation", "SOLICITED-MODE", "COMPLIMENTARY") | Cosmetic. |
-
-**Not covered by these notes at all (v1.1):** Terraform, AI/ML, Layer 3 EtherChannel, BPDU Filter, wireless GUI WPA2-PSK details beyond images.
-
-**Not yet checked:** the other ~50 files.
-
----
-
-## F. Suggested order
+## E. Suggested order
 
 1. Fix section A (all high-confidence items).
 2. Clean up section B.
 3. Correct the tracker (section C).
 4. Add missing blueprint items: 6.4 AI/ML, Layer 3 EtherChannel, 5.3/5.4 config, `rapid-pvst`.
-5. Fill gaps (OSPF first, then FHRP, NAT, NTP, SNMP, Syslog, L2 security, IPv6, IPsec), using your videos as the source and the community notes only as a cross-check.
+5. Fill gaps (OSPF first, then FHRP, NAT, NTP, SNMP, Syslog, L2 security, IPv6, IPsec) from your video notes.
