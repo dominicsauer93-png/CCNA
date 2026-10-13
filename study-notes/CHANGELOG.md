@@ -63,6 +63,12 @@ Not changed anywhere: tracker status marks (✅ 🔄 ⚠) on existing rows, BGP 
 
 Acronym rule used: the first time an acronym appears it stays; later repeats of the same acronym were removed. Acronyms.docx remains the full master list.
 
+### 1c. Command selection guide, and a fix to my earlier edit
+| Where | Before | After |
+|---|---|---|
+| New "Part 14 — Choosing the Right Command" (after Part 13, before the tracker) | — | Six rules for picking a command; "what do you need to know → best command" table (19 rows); which mode a command goes in; reading interface status; look-alike pairs; cue words → protocol or feature; common traps in quiz answers. To remove: delete everything from the "Part 14" heading down to the "Exam Topic Coverage Tracker" heading. |
+| 6.4 AI/ML gap box, "Cover:" line | My earlier edit made this line a large Heading 1 by mistake | Fixed: now a normal small red "Cover:" line like the other gap boxes |
+
 ## 2. CCNA_vs_RealWorld.docx
 | Where | Before | After |
 |---|---|---|
