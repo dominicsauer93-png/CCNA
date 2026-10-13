@@ -8,7 +8,7 @@ Every edit made to the study documents, with the text before and after.
 **To revert everything:** copy the file from `originals/` over the edited one.
 **To revert one change:** open the edited file and put back the "Before" text from the tables below.
 
-Not changed anywhere: tracker status marks (✅ 🔄 ⚠) on existing rows, BGP commands, BPDU Filter table wording, Chef wording, TCAM/CAM wording.
+Not changed anywhere (as you asked, the RIP/EIGRP/Puppet/Chef/SD-Access sections were left as they are): tracker status marks (✅ 🔄 ⚠) on existing rows, BGP commands, BPDU Filter table wording, Chef wording, TCAM/CAM wording.
 
 ## 1. CCNA.docx
 
@@ -69,6 +69,22 @@ Acronym rule used: the first time an acronym appears it stays; later repeats of 
 | New "Part 14 — Choosing the Right Command" (after Part 13, before the tracker) | — | Six rules for picking a command; "what do you need to know → best command" table (19 rows); which mode a command goes in; reading interface status; look-alike pairs; cue words → protocol or feature; common traps in quiz answers. To remove: delete everything from the "Part 14" heading down to the "Exam Topic Coverage Tracker" heading. |
 | 6.4 AI/ML gap box, "Cover:" line | My earlier edit made this line a large Heading 1 by mistake | Fixed: now a normal small red "Cover:" line like the other gap boxes |
 
+### 1d. Navigation, reference parts and review table (CCNA.docx)
+| Where | Before | After |
+|---|---|---|
+| Top of document | Title only | Added a clickable "Contents" list (Parts and topics, with page numbers) and a page break before Part 1. To refresh page numbers in Word: right-click the list → Update Field. To remove: delete from the "Contents" label to the page break. |
+| Footer | None | Added footer: "CCNA Exam v1.1 (200-301) — Study Notes" and "Page X of Y". Footer distance changed from 708 to 360 so it fits in the margin. |
+| 37 sub-headings that were only bold text | Not in the Word navigation pane or contents | Converted to real headings (Heading 3; the 7 in Part 14 are Heading 2). Same look. They are: 802.11 & Wi-Fi standards; Shared medium, half-duplex & CSMA/CA; Signal coverage & propagation; Radio frequency (RF) basics; Wi-Fi bands & channels; Service sets (IBSS / BSS / ESS / MBSS); Distribution System (DS); Additional AP operating modes; 802.11 frame format; 802.11 association process; AP deployment models; Autonomous APs; Lightweight APs & Split-MAC architecture; Cloud-based APs (Meraki); WLAN configuration on the WLC (GUI); Topology & connections; WLC ports vs interfaces; Creating a WLAN — security (GUI); What an ACL is; How ACLs work; ACL types; Wildcard masks & entry ordering; Standard ACL commands (IOS); Extended ACLs; What an extended ACE matches; Extended ACL command syntax; Editing ACLs — sequence numbers & resequencing; Why automate; Logical planes (data / control / management); CPU vs ASIC (hardware forwarding); Six rules for picking the command; What do you need to know? → best command; Which mode does the command go in?; Reading interface status (show ip interface brief); Look-alike pairs — what is the difference?; Cue words → protocol or feature; Common traps in quiz answers. |
+| Heading 1 and 2 paragraphs | — | Added hidden bookmarks so the contents entries can link to them. |
+| New Part 15 — Defaults and Numbers | — | Timers, administrative distance, addresses and protocol numbers, limits and defaults. |
+| New Part 16 — Reading Command Output | — | Sample output with notes for: show ip route, show ip interface brief, show interfaces status, show mac address-table, show interfaces trunk, show spanning-tree, show etherchannel summary, show ip ospf neighbor. |
+| New Part 17 — Troubleshooting | — | Bottom-up method, the ping ladder, and a symptom → cause → check → fix table (17 rows). |
+| New Part 18 — Lab Companion | — | Eight short labs (basic setup, VLAN/trunk/inter-VLAN, Rapid PVST+, EtherChannel, static routes, OSPF, RIP/EIGRP, ACLs), each with a config, a verify line and a "break it" idea. |
+| New Part 19 — Domain Cheat Sheets | — | One page per exam domain, built only from topics already in the notes, with a "Still to add" line for the gaps. |
+| Exam Topic Coverage Tracker heading | No page break | Page break before it (so the Domain 6 sheet stays on its own page). |
+| New "Review Status" section at the end | — | Table of how far to trust each Part, known open items, and a blank "Lab-tested?" column for you. |
+To remove Parts 15–19 and Review Status: delete from each "Part 15" … "Part 19" heading down to the next heading, and the Review Status section at the end.
+
 ## 2. CCNA_vs_RealWorld.docx
 | Where | Before | After |
 |---|---|---|
@@ -112,3 +128,27 @@ Acronym rule used: the first time an acronym appears it stays; later repeats of 
 | Stray bullet after table | TCP -Transmission Control Protocol | (deleted — duplicate of the TCP / IP table rows) |
 | Stray bullet after table | IP – Internet Protocol | (deleted — duplicate of the TCP / IP table rows) |
 
+### 3b. Basic_Configuration_Commands.docx — rows added to match CCNA.docx
+| Where | Before | After |
+|---|---|---|
+| Routing: row added from CCNA.docx | — | router rip |
+| Routing: row added from CCNA.docx | — | version 2 |
+| Routing: row added from CCNA.docx | — | no auto-summary |
+| Routing: row added from CCNA.docx | — | debug ip rip |
+| Routing: row added from CCNA.docx | — | show ip rip database |
+| Routing: row added from CCNA.docx | — | show ip protocols |
+| Routing: row added from CCNA.docx | — | eigrp router-id <IP> |
+| Routing: row added from CCNA.docx | — | show ip eigrp topology |
+| Routing: row added from CCNA.docx | — | variance <multiplier> |
+| Routing: row added from CCNA.docx | — | ip access-list standard <name> |
+| Security: row added from CCNA.docx | — | show ip access-lists |
+
+### 4b. Acronyms.docx — rows added to match CCNA.docx
+| Where | Before | After |
+|---|---|---|
+| Row added from CCNA.docx | — | AS — Autonomous System |
+| Row added from CCNA.docx | — | DNA — Digital Network Architecture |
+| Row added from CCNA.docx | — | ECMP — Equal Cost Multi-Path |
+| Row added from CCNA.docx | — | IS-IS — Intermediate System to Intermediate System |
+| Row added from CCNA.docx | — | RIP — Routing Information Protocol |
+| Row added from CCNA.docx | — | VM — Virtual Machine |
