@@ -69,3 +69,11 @@ Confidence: **High** = sure. **Medium** = check against your video before changi
 3. Correct the tracker (section C).
 4. Add missing blueprint items: 6.4 AI/ML, Layer 3 EtherChannel, 5.3/5.4 config, `rapid-pvst`.
 5. Fill gaps (OSPF first, then FHRP, NAT, NTP, SNMP, Syslog, L2 security, IPv6, IPsec) from your video notes.
+
+---
+
+## Applied (in `study-notes/CCNA.docx` and `study-notes/CCNA_vs_RealWorld.docx`)
+
+Fixed: A1–A5, A7–A12, A14–A17, A19, A20; all of section B except the BGP rows; the tracker row for 6.x was split so 6.4 shows.
+
+**Not changed (your call):** A6 (BPDU Filter wording), A13 (Chef), A18 (Ctrl+Z), section C status marks, section D simplifications, BGP rows in the routing commands table.
