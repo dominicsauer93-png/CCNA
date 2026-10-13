@@ -64,12 +64,13 @@ Confidence: **High** = sure. **Medium** = check against your video before changi
 
 ## E. Community notes (`ccna-community-notes/`)
 
-**What they are:** one person's notes on Jeremy's IT Lab *Complete CCNA 200-301* course, Days 1–63. This is the **2020, v1.0-era** course.
+**What they are:** one person's notes on Jeremy's IT Lab *Complete CCNA 200-301* course (same playlist you follow), Days 1–63. They look like the **v1.0-era cut** of it.
 
 **Evidence they are not v1.1:**
 - Day 63 is Ansible/Puppet/Chef. v1.1 dropped Puppet/Chef and added Terraform.
 - No Terraform and no AI/ML anywhere (searched).
-- They say Root Guard/Loop Guard "probably aren't needed" and have no BPDU Filter. Your doc has full coverage, so **your videos are newer than these notes (or you added extra)**.
+- They say Root Guard/Loop Guard "probably aren't needed" and have no BPDU Filter. Your doc has full coverage, so either the playlist was updated after these notes, or the extras came from elsewhere. Not confirmed (YouTube is not reachable from this session).
+- **Decision:** your own video notes take priority over these notes. The blueprint is the authority on what is tested.
 
 **Limits:**
 - 882 images are linked from GitHub rather than stored in the repo. Tables, configs and command outputs (e.g. NTP has 34, Wireless Configuration 50) are not in the text, so I cannot verify those parts.
