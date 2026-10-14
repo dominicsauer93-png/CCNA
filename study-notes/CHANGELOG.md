@@ -105,6 +105,27 @@ To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 
 | 802.11 table, 802.11be row, Year | 2024 | — (the exact year is unclear, so it was left out) |
 | Basic_Configuration_Commands.docx, show ip access-lists row | "(show access-lists lists all ACL types)" | Comparison removed |
 
+### 1f. Review round 2 applied, A4 page size (CCNA.docx)
+| Where | Before | After |
+|---|---|---|
+| STP → BPDUs | "Switches send Hello BPDUs out all interfaces every 2 seconds." | "Switches send Hello BPDUs out their designated ports every 2 seconds (the root bridge originates them)." |
+| EIGRP → network command | "Unlike RIP, EIGRP can accept a classless address with a mask if you don't specify one, it assumes classful (/8, /16, /24)." | "Unlike RIP, EIGRP accepts a network with a wildcard mask. If you leave the mask out, it assumes the classful network (/8, /16 or /24)." |
+| Route Codes and routing table components | Codes L, C, S, O, D | Added "R — RIP — learned via RIP dynamic routing." and "(C, L, S, O, D, R)" |
+| Part 5 → Passwords | "Uses MD5 encryption." | "Stored as a hash (MD5 in the course), not reversible encryption." |
+| Part 5 → command table | enable secret: "Sets an MD5-encrypted password…"; service password-encryption: "Encrypts all cleartext passwords… NO effect on enable secret." | "Sets a hashed (MD5) password…"; "… Weak, reversible encryption (Type 7). NO effect on enable secret." |
+| Part 14 cue words | "LLDP (any vendor)" | "LLDP (vendor-neutral)" |
+| Cisco SDN Solutions table and cheat sheet | "vManage" | "vManage (now called SD-WAN Manager)" |
+| EIGRP acronym table | No borders | Borders added (same blue as the other acronym tables) |
+| Administrative distance table (Static Routes) | No borders | Grey borders added |
+| 14 "Key Commands" tables | Dark-green borders | Grey (BFBFBF) borders |
+| Extended ACL reminder box | Pale blue box, navy text | Blue (17527E) box, white text, like the other reminder boxes |
+| Part 9 order | RIP → EIGRP → OSPFv2 → Routing Fundamentals → … → Static Routes → "OSPF" (gap box) → FHRP | Routing Fundamentals → Route Codes → Route Selection → Default Route → Static Routes → RIP → EIGRP → OSPFv2 (gap box moved to the end of OSPFv2) → FHRP. The second "OSPF" heading and its 3.4 bar were removed. |
+| Part 9 → Static Routes → Key Commands table | Also listed: router ospf, network … area, router eigrp, router bgp, neighbor, show ip ospf neighbor, show ip eigrp neighbors, show ip bgp summary | Those 8 rows removed (the OSPF and EIGRP ones are in their own section tables). The 3 BGP rows now live only in Basic_Configuration_Commands.docx. |
+| Real-world pointers | — | 3 new bullets "Real-world: see CCNA_vs_RealWorld.docx — …" at the end of Why STP Exists, Inter-VLAN Routing (hybrid port) and Floating static (Null0). |
+| New "Blueprint Index" (before the tracker) | — | Table of every blueprint objective → where it is in these notes → a status note (gap box, no notes yet, brief so far, etc.). Section names are checked against the real headings when the document is built. |
+| Title block | — | "Last updated: 14 October 2026" |
+| Page size | US Letter | A4 (all five study docs). The left/right margins were widened so the existing table widths still fit. |
+
 ## 2. CCNA_vs_RealWorld.docx
 | Where | Before | After |
 |---|---|---|
@@ -172,3 +193,13 @@ To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 
 | Row added from CCNA.docx | — | IS-IS — Intermediate System to Intermediate System |
 | Row added from CCNA.docx | — | RIP — Routing Information Protocol |
 | Row added from CCNA.docx | — | VM — Virtual Machine |
+
+### 3c. Basic_Configuration_Commands.docx — review round 2
+| Where | Before | After |
+|---|---|---|
+| enable secret row | "…encrypting the password for security." | "…The password is stored as a hash, not in plain text." |
+| service password-encryption row | "…which is always encrypted." | "Weak, reversible encryption (Type 7). … which is already hashed." |
+| Page size | US Letter | A4 (margins adjusted so the table still fits) |
+
+### 4c. Acronyms.docx and 2b. CCNA_vs_RealWorld.docx
+Page size changed from US Letter to A4 (margins adjusted so the tables still fit). No text changes.

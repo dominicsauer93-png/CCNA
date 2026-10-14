@@ -1,6 +1,8 @@
 # Review round 2 — CCNA.docx (65 pages)
 
-Nothing has been changed. This is a list of proposed fixes. Only items I am certain about are in section A.
+**Status: all of section A and all of section B applied on 2026-10-14, with A4 as the print choice (see CHANGELOG.md, section 1f). The other print options (10 pt text, lighter shading, a new page for each Part) were not applied.**
+
+Only items I am certain about are in section A.
 
 How it was checked: a full re-read of the current text, plus automated checks of colours, borders, bullets, spelling variants, duplicate text and the contents list.
 
