@@ -3,7 +3,7 @@
 Every edit made to the study documents, with the text before and after.
 
 - `study-notes/originals/` = the files exactly as you uploaded them.
-- `study-notes/` = the edited versions.
+- `study-notes/` = the edited versions (plus `CCNA_Lab_Companion.docx`, which is new).
 
 **To revert everything:** copy the file from `originals/` over the edited one.
 **To revert one change:** open the edited file and put back the "Before" text from the tables below.
@@ -79,11 +79,31 @@ Acronym rule used: the first time an acronym appears it stays; later repeats of 
 | New Part 15 — Defaults and Numbers | — | Timers, administrative distance, addresses and protocol numbers, limits and defaults. |
 | New Part 16 — Reading Command Output | — | Sample output with notes for: show ip route, show ip interface brief, show interfaces status, show mac address-table, show interfaces trunk, show spanning-tree, show etherchannel summary, show ip ospf neighbor. |
 | New Part 17 — Troubleshooting | — | Bottom-up method, the ping ladder, and a symptom → cause → check → fix table (17 rows). |
-| New Part 18 — Lab Companion | — | Eight short labs (basic setup, VLAN/trunk/inter-VLAN, Rapid PVST+, EtherChannel, static routes, OSPF, RIP/EIGRP, ACLs), each with a config, a verify line and a "break it" idea. |
-| New Part 19 — Domain Cheat Sheets | — | One page per exam domain, built only from topics already in the notes, with a "Still to add" line for the gaps. |
+| New Part 18 — Domain Cheat Sheets | — | One page per exam domain, built only from topics already in the notes, with a "Still to add" line for the gaps. |
 | Exam Topic Coverage Tracker heading | No page break | Page break before it (so the Domain 6 sheet stays on its own page). |
 | New "Review Status" section at the end | — | Table of how far to trust each Part, known open items, and a blank "Lab-tested?" column for you. |
-To remove Parts 15–19 and Review Status: delete from each "Part 15" … "Part 19" heading down to the next heading, and the Review Status section at the end.
+To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 18" heading down to the next heading, and the Review Status section at the end.
+
+### 1e. Labs moved out, and an accuracy pass (you asked for only information I am certain of)
+| Where | Before | After |
+|---|---|---|
+| Part 18 — Lab Companion | Eight labs inside CCNA.docx | Moved to a separate file, `CCNA_Lab_Companion.docx`. The cheat sheets became Part 18 and the Review Status table was renumbered. |
+| STP bullet, rapid-pvst row (CCNA.docx and Basic_Configuration_Commands.docx), Part 15, Part 18 cheat sheet | "Cisco switches default to PVST+" | "Classic Catalyst switches (for example the 2960) default to PVST+" and "check yours with show spanning-tree summary". Newer platforms may differ and I could not confirm them. |
+| Part 15, STP port costs | "Short (Cisco default) … Long (RSTP scale)" | "Classic STP … RSTP scale". The claim about which scale Cisco uses by default was removed. |
+| Part 16, show spanning-tree notes | A "Cost note" about the default cost scale | Removed. |
+| Part 15, limits table | Row: "ECMP paths 4 by default, up to 32 (depends on IOS)" | Row removed (not certain). |
+| Part 16 | No label on the sample output | Added: samples were typed by hand and your device will differ. |
+| Part 16, show etherchannel summary note | "(s) suspended — usually a config mismatch or incompatible modes (passive/passive, auto/auto)" | "(s) = suspended. Members whose settings do not match the others can be suspended; (I) = stand-alone, not bundled." |
+| Part 16, show mac address-table note | "…again and again = a loop" | "…usually points to a Layer 2 loop" |
+| Part 17, ping ladder and table | "Ping works one way only = no return route" | "Often no return route (an ACL on the way back is another cause)" |
+| Part 17, EtherChannel row | "Mismatched … passive+passive, auto+auto, on+active" | "Settings that do not match the other members or the other switch; incompatible modes …" |
+| Part 14, show interfaces row | "The only command with error counters" | "Shows the error counters (CRC, collisions) plus duplex and speed" (other commands, such as show interfaces counters errors, also show errors) |
+| Part 14, Part 15, Part 18: CDP wording | "CDP is Cisco only / CDP only sees Cisco devices" | "CDP is Cisco-proprietary; LLDP is the vendor-neutral standard" |
+| RIP and EIGRP exam-ref bars | "Not on v1.1 exam: …" | "Not listed in the v1.1 blueprint: …" (Cisco says other topics may appear, so "not on the exam" was too strong.) |
+| Part 13 exam-ref bar | "(Puppet and Chef are not on the v1.1 exam)" | "(Puppet and Chef are not named in the v1.1 blueprint)" |
+| DNS bullet | "(e.g. google.com → 142.250.x.x)" | "(e.g. google.com → an IPv4 address)" |
+| 802.11 table, 802.11be row, Year | 2024 | — (the exact year is unclear, so it was left out) |
+| Basic_Configuration_Commands.docx, show ip access-lists row | "(show access-lists lists all ACL types)" | Comparison removed |
 
 ## 2. CCNA_vs_RealWorld.docx
 | Where | Before | After |

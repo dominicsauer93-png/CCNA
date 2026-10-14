@@ -15,7 +15,7 @@ Confidence: **High** = sure. **Medium** = check against your video before changi
 | 2 | Part 10, STP timers, Convergence line | "Blocking → Listening (15s) → Learning (15s) → Forwarding = 50 seconds" (adds up to 30) | 50s = Max Age 20 + Listening 15 + Learning 15 | High |
 | 3 | STP, Root Bridge Election | "Bridge ID = Priority + MAC" | Bridge ID = Priority + **VLAN ID (system ID ext.)** + MAC. Priority moves in steps of **4096**. VLAN 1 default shows 32769. | High |
 | 4 | STP, Root Bridge Election | Tie-breakers missing | Add: lowest root path cost, then lowest sender Bridge ID, then lowest sender port ID. | High |
-| 5 | STP commands | `spanning-tree mode rapid-pvst` missing | Cisco default is PVST+. This command turns on Rapid PVST+, which is exactly what exam item 2.5 tests. Also add `root primary` = priority 24576, `root secondary` = 28672. | High |
+| 5 | STP commands | `spanning-tree mode rapid-pvst` missing | Classic Catalyst switches default to PVST+. This command turns on Rapid PVST+, which is exactly what exam item 2.5 tests. Also add `root primary` = priority 24576, `root secondary` = 28672. | High |
 | 6 | STP, BPDU Filter table | "BPDU Filter disables the port" | Filter never disables a port. With global filter, receiving a BPDU turns off PortFast and the filter on that port; BPDU Guard then err-disables it. | Medium |
 | 7 | STP commands table | `spanning-tree guard root` missing | Add it. It is mentioned in the text but not in the table. | High |
 | 8 | CCNA_vs_RealWorld, Null0 section | "AD 80 … loses to internal EIGRP (90)" | Lower AD wins, so 80 **beats** EIGRP (90), OSPF (110), RIP (120). It only loses to connected (0), static (1), eBGP (20). | High |
