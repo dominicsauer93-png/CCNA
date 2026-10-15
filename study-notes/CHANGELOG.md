@@ -126,6 +126,24 @@ To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 
 | Title block | — | "Last updated: 14 October 2026" |
 | Page size | US Letter | A4 (all five study docs). The left/right margins were widened so the existing table widths still fit. |
 
+### 1g. Video notes added: Dynamic Routing (CCNA.docx, source: `study-notes/video-notes/CCNA_Dynamic_Routing.docx`)
+| Where | Before | After |
+|---|---|---|
+| Part 9, new section "Dynamic Routing Fundamentals" (after Static Routes, before RIP) | — | New Heading 2 with: key acronyms table (IGP, EGP, AS, ECMP, AD, IGRP, IS-IS, BGP); Route types; What dynamic routing does; IGP vs EGP (with a text version of your diagram and a Category/Type/Protocols table); Distance vector — routing by rumour; Link state; Metrics (transcribed from your metrics image); Equal-cost routes (ECMP, your ** rule kept in bold); Administrative Distance (floating static route detail; full AD table transcribed from your image). To remove: delete from the "Dynamic Routing Fundamentals" heading down to the "RIP" heading. |
+| EIGRP acronym table | Rows EIGRP, AS, ECMP | Rows AS and ECMP removed (now defined in the new section) |
+| Part 13 acronym table (SD-Access) | Row IS-IS | Row removed (now defined in the new section). Its SD-Access description was: "Link-state routing protocol used in SD-Access Greenfield underlay (instead of OSPF)." |
+| Static Routes → Key Commands table | No host-route row | Added: ip route <host-IP> 255.255.255.255 <next-hop> (your sheet had the command unfinished) |
+| Part 15 → Administrative distance table | No IGRP or IS-IS | Added IGRP 100 and IS-IS 115 (from your AD image) |
+| Part 18 → Domain 3 cheat sheet | — | New row "Dynamic routing types" |
+| Blueprint Index, 3.2 | "Part 9 — Route Selection" | "Part 9 — Route Selection, Dynamic Routing Fundamentals (AD and metrics)" |
+
+Notes on your sheet (what I changed or did not take as written):
+- "A Default route is a route to a network (/32)" was **not** copied. A default route is 0.0.0.0/0 (the doc already said this).
+- "A default route is a route to the default gateway" was kept, with 0.0.0.0/0 added.
+- The last bullet on floating static routes was cut off in the sheet. It now ends "…causes the adjacency with a neighbour to be lost" — please check this against the video.
+- "Dynamic routing advertises its routes (you can reach network) via me" was written as: Advertising a route means "you can reach this network via me".
+- Typos were fixed silently (adjancies, rout, thus, bu).
+
 ## 2. CCNA_vs_RealWorld.docx
 | Where | Before | After |
 |---|---|---|
@@ -203,3 +221,13 @@ To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 
 
 ### 4c. Acronyms.docx and 2b. CCNA_vs_RealWorld.docx
 Page size changed from US Letter to A4 (margins adjusted so the tables still fit). No text changes.
+
+### 3d. Basic_Configuration_Commands.docx — Dynamic Routing notes
+| Where | Before | After |
+|---|---|---|
+| Routing section | — | Added row: ip route <host-IP> 255.255.255.255 <next-hop-IP> |
+
+### 4d. Acronyms.docx — Dynamic Routing notes
+| Where | Before | After |
+|---|---|---|
+| Acronym table | — | Added rows: IGP, EGP, AD, IGRP |
