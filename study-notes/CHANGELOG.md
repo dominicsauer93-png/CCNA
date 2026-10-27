@@ -126,7 +126,7 @@ To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 
 | Title block | — | "Last updated: 14 October 2026" |
 | Page size | US Letter | A4 (all five study docs). The left/right margins were widened so the existing table widths still fit. |
 
-### 1g. Video notes added: Dynamic Routing (CCNA.docx, source: `study-notes/video-notes/CCNA_Dynamic_Routing.docx`)
+### 1g. Video notes added: Dynamic Routing (CCNA.docx, source: `study-notes/video-notes/CCNA_Dynamic_Routing.docx`, updated 2026-10-27)
 | Where | Before | After |
 |---|---|---|
 | Part 9, new section "Dynamic Routing Fundamentals" (after Static Routes, before RIP) | — | New Heading 2 with: key acronyms table (IGP, EGP, AS, ECMP, AD, IGRP, IS-IS, BGP); Route types; What dynamic routing does; IGP vs EGP (with a text version of your diagram and a Category/Type/Protocols table); Distance vector — routing by rumour; Link state; Metrics (transcribed from your metrics image); Equal-cost routes (ECMP, your ** rule kept in bold); Administrative Distance (floating static route detail; full AD table transcribed from your image). To remove: delete from the "Dynamic Routing Fundamentals" heading down to the "RIP" heading. |
@@ -140,7 +140,7 @@ To remove Parts 15–18 and Review Status: delete from each "Part 15" … "Part 
 Notes on your sheet (what I changed or did not take as written):
 - "A Default route is a route to a network (/32)" was **not** copied. A default route is 0.0.0.0/0 (the doc already said this).
 - "A default route is a route to the default gateway" was kept, with 0.0.0.0/0 added.
-- The last bullet on floating static routes was cut off in the sheet. It now ends "…causes the adjacency with a neighbour to be lost" — please check this against the video.
+- The floating static bullet was complete in your sheet. An earlier version of this log said it was cut off; that was my mistake. The updated sheet (saved in `study-notes/video-notes/`) fixes two typos in it, and the doc now says "the remote router stops advertising it".
 - "Dynamic routing advertises its routes (you can reach network) via me" was written as: Advertising a route means "you can reach this network via me".
 - Typos were fixed silently (adjancies, rout, thus, bu).
 
