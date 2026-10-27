@@ -231,3 +231,17 @@ Page size changed from US Letter to A4 (margins adjusted so the tables still fit
 | Where | Before | After |
 |---|---|---|
 | Acronym table | — | Added rows: IGP, EGP, AD, IGRP |
+
+### 5. Notes template v2 (new file, nothing existing changed)
+`templates/CCNA_notes_template_v2.docx` is new. `templates/CCNA_notes_template_v1.docx` is your original, kept for revert.
+| Area | v1 | v2 |
+|---|---|---|
+| Page size | Letter | A4 |
+| Action for Claude | — | Tick boxes: add to doc / review only / other |
+| Session details | — | Video, link, objectives, where it goes, date, tracker status you would give |
+| Marks | * and ** | Added ? = not sure, please check; image caption rule |
+| Commands | — | Table: Command, What it does, Mode, Device |
+| New acronyms | — | Table |
+| Real-world notes | — | New section (feeds CCNA_vs_RealWorld) |
+| Lab and quiz check | — | Lab done, what I broke, quiz questions I got wrong |
+| Submit steps | — | 3 steps |
