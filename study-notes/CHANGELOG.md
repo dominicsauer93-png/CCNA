@@ -245,3 +245,30 @@ Page size changed from US Letter to A4 (margins adjusted so the tables still fit
 | Real-world notes | — | New section (feeds CCNA_vs_RealWorld) |
 | Lab and quiz check | — | Lab done, what I broke, quiz questions I got wrong |
 | Submit steps | — | 3 steps |
+
+### 6. NTP notes merged (from video-notes/CCNA_NTP.docx, Day 37)
+CCNA.docx, Part 11 — NTP: the gap box is replaced with full notes. Everything came from your sheet and its 10 screenshots. Images became text or tables.
+| Where | Before | After |
+|---|---|---|
+| Part 11 NTP | Gap box | Device clocks, manual time, NTP basics, stratum table, modes, commands, reading the show output, ntp master, symmetric active mode, authentication |
+| Part 11 acronyms | DHCP, DNS | Added NTP, UTC, GPS, MD5 |
+| Part 14 | — | Added row: is the clock synchronised → show ntp status |
+| Part 15 Limits and defaults | — | Added NTP row (UDP 123, stratum 0/1/15, ntp master default 8) |
+| Part 16 | — | Added show ntp associations / show ntp status |
+| Part 18 IP Services | NTP in "Still to add" | NTP row added; removed from "Still to add" |
+| Blueprint Index 4.2 | Gap box | Covered |
+| Review Status Part 11 | NAT, NTP, SNMP, Syslog gaps | NAT, SNMP, Syslog gaps |
+| "Last updated" | 14 October 2026 | 4 November 2026 |
+| Basic_Configuration_Commands.docx | — | New section "Clock and NTP" (20 rows) |
+| Acronyms.docx | — | Added NTP, UTC, GPS, MD5 |
+
+Changes to your wording:
+| Your note | Change |
+|---|---|
+| "Time is configured from global configuration mode, not privilege exec mode" | clock set and calendar set are privileged EXEC. clock timezone and clock summer-time are global config. Stated that way. |
+| "Ref clock – using Google's reference clock … stratum 1" | Split: ref clock column = the server's own source (.GOOG.), st column = its stratum |
+| "Loopback addresses and interfaces" | Kept, tied to 127.127.1.1 / .LOCL. (the local clock after ntp master) |
+| Slide typo: R3 showed "R2(config)# ntp peer 10.0.23.1 key 1" | Written as R3 |
+| ntp source reminder | Kept as a reminder, worded "may not sync". Check against the video. |
+
+The Coverage Tracker row for 4.2 still shows ⚠. The status is your call.
