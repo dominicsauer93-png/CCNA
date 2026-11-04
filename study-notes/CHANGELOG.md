@@ -272,3 +272,11 @@ Changes to your wording:
 | ntp source reminder | Kept as a reminder, worded "may not sync". Check against the video. |
 
 The Coverage Tracker row for 4.2 still shows ⚠. The status is your call.
+
+### 7. Notes template v3 (new file, v1 and v2 kept)
+`templates/CCNA_notes_template_v3.docx`. Based on how the v2 sheet was used for NTP.
+| Area | v2 | v3 |
+|---|---|---|
+| Commands table | Command, What it does, Mode, Device | Command, What it does (Claude adds mode and device) |
+| Things to Expand / Clarify | Separate section | Removed. Write what you want after a `*` in Main Notes |
+| `*` mark | Expand this | Expand this, and say what you want after it |
