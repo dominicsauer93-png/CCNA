@@ -280,3 +280,4 @@ The Coverage Tracker row for 4.2 still shows ⚠. The status is your call.
 | Commands table | Command, What it does, Mode, Device | Command, What it does (Claude adds mode and device) |
 | Things to Expand / Clarify | Separate section | Removed. Write what you want after a `*` in Main Notes |
 | `*` mark | Expand this | Expand this, and say what you want after it |
+| How to Submit | 3 steps and a tip | Removed (not needed). Now 2 pages |
