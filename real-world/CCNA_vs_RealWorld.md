@@ -344,3 +344,52 @@ The caching redirect entry above explains the caching mechanism; this is the fai
 **Takeaway / next action**
 
 With dynamic VLAN assignment, a VLAN must be carried on every path from every AP to wherever that VLAN is forwarded (here, the VC AP), not just the ports you expected to use it. When some wireless clients get no IP and others are fine, compare which AP they're on: if only member APs fail, trace the VLAN hop by hop with the MAC address table — the switch where the client's MAC stops appearing is where the traffic is being dropped.
+
+## Peer to Peer vs Server-Based Gaming — NAT, Port Forwarding and NAT Types
+
+**📊 Level:** CCNA + Beyond — TCP/UDP (1.5), private addressing (1.7), NAT/PAT and static NAT (4.1), QoS (4.7) and IPv6 (1.8, 1.9) are CCNA; NAT behaviour types, STUN, hole punching and TURN relays are beyond the blueprint.
+
+**📚 Study:** CCNA (1.5, 4.1); ENCOR (350-401) for NAT and QoS; ENARSI (300-410) for NAT troubleshooting
+
+***🧠 What CCNA already gave me:*** *PAT lets many private hosts share one public IP by rewriting the source port, and the router's translation table only lets replies back in. Static NAT maps an inside address to an outside one. UDP suits real-time traffic where a late packet is useless.*
+
+**🔧 What's actually happening:** Online games connect players either **peer to peer** (players' devices talk directly: one player hosts, or every player talks to every other) or **server based** (every player connects out to a central game server). The difference decides whether NAT gets in the way.
+
+- **Why NAT is the problem:** PAT creates a translation table entry only for traffic going **out**. Traffic that starts from outside has no entry, so the router drops it. Server-based games always connect out, so they just work. P2P needs another player to connect **in**, so it struggles.
+- **P2P doesn't change the game's ports — the router does:** the game picks the local port (e.g. `192.168.1.10:3074`); PAT may rewrite it to a different public port (e.g. `203.0.113.5:61001`). For server traffic this doesn't matter, because the server just replies to the port it sees. For P2P, the other player must know your **public** port in advance.
+- **STUN:** the game asks a public STUN server "what IP and port do you see me as?" and shares that public address with the other player through matchmaking.
+- **UDP hole punching:** both players send to each other's public address at the same time. Each router sees outgoing traffic, creates a table entry, and lets the other player's packets in. Works best with UDP, which is why games use it.
+- **TURN / relay:** if hole punching fails, both players send through a relay server. Always works, adds latency.
+- **Port forwarding / UPnP:** pins the public port to the game's port (`203.0.113.5:3074 → 192.168.1.10:3074`), so anyone can reach you. UPnP does this automatically on request, which is why businesses disable it (any device or malware can open ports). A DMZ host forwards everything to one device — avoid.
+- **NAT types (console Open / Moderate / Strict):** describe how predictable your public port is.
+
+| Console label | Router behaviour | Result |
+| --- | --- | --- |
+| Open | Port forward / UPnP, or full-cone NAT | Reachable by everyone; can host |
+| Moderate | Restricted / port-restricted cone NAT: same public port for every destination, only replies from addresses already contacted | Hole punching works; can't connect to Strict |
+| Strict | Symmetric NAT: a different public port for every destination | STUN's answer is wrong for other players; hole punching fails; needs a relay or an Open player |
+
+- **Things that make it worse:** **double NAT** (ISP modem and own router both doing NAT — bridge the modem or forward on both); **CGNAT** (ISP shares one public IP across customers, `100.64.0.0/10` on the WAN — no port forwarding possible, ask the ISP for a public IP); firewalls blocking the ports even when NAT is fine.
+- **IPv6 removes the problem:** every device gets a global address, so no NAT; the firewall just needs to allow the traffic.
+
+**P2P vs server based**
+
+| | Peer to peer | Server based |
+| --- | --- | --- |
+| Traffic flow | Player to player | Player to server |
+| NAT issues | Common (Strict NAT) | Rare |
+| Latency | Depends on the host's connection | Depends on distance to the server |
+| Bandwidth | High upload on the host | Low per player |
+| Fairness / cheating | Host advantage, easier cheating | Server is authoritative, harder to cheat |
+| Security | Players' IPs exposed (DDoS risk) | IPs hidden; server takes attacks |
+
+**Commands**
+
+| Command | Purpose |
+| --- | --- |
+| `ip nat inside source static udp 192.168.1.10 3074 interface GigabitEthernet0/0/0 3074` | Cisco port forward: static NAT for one UDP port |
+| `show ip nat translations` | Inside local (private IP:port) next to inside global (public IP:port) the router chose |
+
+**Takeaway / next action**
+
+A port forward is just static NAT for one port, and "NAT type" is really a question of whether the router's chosen public port is predictable. Server-based games only need outbound PAT; P2P needs the public port known in advance (STUN, hole punching, port forwarding) or a relay. On a school network, P2P games usually fail behind strict firewalls and NAT, game blocking is done by application control rather than ports (game ports change), and large game downloads are rate-limited or blocked to protect bandwidth.
